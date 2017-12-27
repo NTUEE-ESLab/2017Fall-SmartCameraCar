@@ -6,6 +6,8 @@
 #include <opencv2/highgui.hpp>
 #include <iostream>
 #include <cstring>
+
+// the c code
 #include <unistd.h>
 #include <errno.h>
 #include <stdio.h>
@@ -31,6 +33,7 @@ static const char *devName = "/dev/i2c-1";
 int main(int argc, char **argv)
 {
 
+    // the c code
     int file, num;
     printf("I2C: Connecting\n");
     if ((file = open(devName, O_RDWR)) < 0)
@@ -145,15 +148,24 @@ int main(int argc, char **argv)
         // Display tracker type on frame
         // putText(frame, trackerType + " Tracker", Point(100,20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(50,170,50),2);
         
+        // determine whether need move
+        int Forward_Backward=0; // 0=stop, 1=forward, 2=backward;
+        int Left_Right=0; // 0=stop, 1=left, 2=right
         double threshold=1.05;
         if(bbox.height>(inith*threshold)) { // backward
-            write(file, 2, 1); }
+            Forward_Backward=2; }
         else if(bbox.height<(inith/threshold)) { // forward
-            write(file, 1, 1); }
-        else if(bbox.x+bbox.width/2>intix*threshold) { // turn right
-            write(file, 3, 1); }
+            Forward_Backward=1; }
+        else { // stop
+            Forward_Backward=0; }
+        if(bbox.x+bbox.width/2>intix*threshold) { // turn right
+            Left_Right=2; }
         else if(bbox.x+bbox.width/2<initx/threshold) { // turn left
-            write(file, 4, 1); }
+            Left_Right=1; }
+        else { // stop
+            Left_Right=0; }
+
+        // send the command through i2c
 
         FrameCounter++;
 
