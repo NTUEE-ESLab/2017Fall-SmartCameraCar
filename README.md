@@ -69,4 +69,14 @@ For OpenCV to use the camera, we should enable v4l2
 
 Then you can see the camera device at `/dev/video0`, and you can use `VideoCapture video(0);` to get the camera frames.
 
+### Enable I2C
 
+Enable the I2C
+
+>sudo raspi-config
+
+Then reboot the pi.
+
+Install I2C tool
+
+>sudo apt-get install i2c-tools
