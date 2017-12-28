@@ -7,15 +7,11 @@
 #include <iostream>
 #include <cstring>
 
-// the c code
+// the i2c dependencies
 #include <unistd.h>
-#include <errno.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <linux/i2c-dev.h>
-#include <sys/ioctl.h>
 #include <fcntl.h>
-#include <unistd.h>
+#include <sys/ioctl.h>
+#include <linux/i2c-dev.h>
 
 using namespace cv;
 using namespace std;
@@ -33,21 +29,22 @@ static const char *devName = "/dev/i2c-1";
 int main(int argc, char **argv)
 {
 
-    // the c code
-    int file, num;
-    printf("I2C: Connecting\n");
-    if ((file = open(devName, O_RDWR)) < 0)
-    {
-            fprintf(stderr, "I2C: Failed to access %d\n", devName);
-            exit(1);
-    }
-    printf("I2C: acquiring buss to 0x%x\n", ADDRESS);
-    if (ioctl(file, I2C_SLAVE, ADDRESS) < 0)
-    {
-            fprintf(stderr, "I2C: Failed to acquire bus access/talk to slavee 0x%x\n", ADDRESS);
-            exit(1);
-    }
+    // Initiate i2c setting
+    // Open the i2c bus
+	if ((file_i2c = open(devName, O_RDWR)) < 0)
+	{
+			std::cout << "Failed to open the i2c bus\n";
+			return 0;
+	}
 
+	// Set the I2C address of the slave
+    int addr = 0x04;
+	if (ioctl(file_i2c, I2C_SLAVE, addr) < 0)
+	{
+			std::cout << "Failed to acquire bus access and/or talk to slave..\n";
+			return 0;
+	}
+    
     // List of tracker types in OpenCV 3.2
     // NOTE : GOTURN implementation is buggy and does not work.
     string trackerTypes[6] = {"BOOSTING", "MIL", "KCF", "TLD","MEDIANFLOW", "GOTURN"};
@@ -166,7 +163,15 @@ int main(int argc, char **argv)
             Left_Right=0; }
 
         // send the command through i2c
-
+        int a = 1, b = 2;
+		unsigned char buffer[2];
+		buffer[0] = Forward_Backward;
+		buffer[1] = Left_Right;
+		if (write(file_i2c, buffer, 2) != 2)
+        {
+		    std::cout << "Failed to write to the i2c bus.\n";
+		}	
+	        
         FrameCounter++;
 
         if(FrameCounter%45==0)
