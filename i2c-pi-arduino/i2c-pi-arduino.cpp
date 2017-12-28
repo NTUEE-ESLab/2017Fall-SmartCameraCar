@@ -28,23 +28,20 @@ int main ()
 	}
 
 	//----- WRITE BYTES -----
-	//while (true)
-	//{
-			int a = 1, b = 2;
-			unsigned char buffer[2];
-			buffer[0] = a;
-			buffer[1] = b;
+	while (true)
+	{
+			int  a = 0 , b = 0;
+			std::cin >> a >> b;
+			unsigned char buffer[1];
+			buffer[0] = a*3+ b;
 			
-	        for(int i = 0 ; i < 2 ; i ++ ){
-      			std::cout << (int)buffer[i];
-			}
-			if (write(file_i2c, buffer, 2) != 2)       
+			if (write(file_i2c, buffer, 1) != 1)       
 	//write() returns the number of bytes actually written, if it doesn't match then an error occurred (e.g. no response from the device)
 			{
 					/* ERROR HANDLING: i2c transaction failed */
 					std::cout << "Failed to write to the i2c bus.\n";
 			}
-	//}
+	}
 
 	return 0;
 }
