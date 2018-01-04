@@ -35,7 +35,7 @@ int main(int argc, char **argv)
     if ((file_i2c = open(devName, O_RDWR)) < 0)
     {
         std::cout << "Failed to open the i2c bus\n";
-	return 0;
+    return 0;
     }
     
     // Set the I2C address of the slave
@@ -100,7 +100,7 @@ int main(int argc, char **argv)
     Rect2d bbox(120, 80, 86, 80);
      
     // Uncomment the line below to select a different bounding box
-    //bbox = selectROI(frame, false);
+    bbox = selectROI(frame, false);
     
     double initx=bbox.x+bbox.width/2;
     double inity=bbox.y+bbox.height/2;
@@ -114,7 +114,13 @@ int main(int argc, char **argv)
    
     int FrameCounter=0;
 
-    // while(video.read(frame))
+    // for tracking movement
+    int Forward_Backward=0; // 0=stop, 1=forward, 2=backward;
+    int Left_Right=0; // 0=stop, 1=left, 2=right
+    double forward_backward_threshold=1.1;
+    double right_left_threshold=1.15;
+
+    // while(video.read(frame))    
     while(1)
     { 
         video>>frame;
@@ -127,13 +133,27 @@ int main(int argc, char **argv)
 
         // Calculate Frames per second (FPS)
         float fps = getTickFrequency() / ((double)getTickCount() - timer);
-         
+        
         if (ok)
         {
             // Tracking success : Draw the tracked object
             rectangle(frame, bbox, Scalar( 255, 0, 0 ), 2, 1 );
             cout<<"\rfps="<<int(fps)<<" x="<<int(bbox.x+bbox.width/2)<<" y="<<int(bbox.y+bbox.height/2)<<" htight="<<int(bbox.height)<<" width="<<int(bbox.width)<<"     ";
             cout.flush();
+
+            // determine whether need move
+            if(bbox.height>(inith*forward_backward_threshold)) { // backward
+                Forward_Backward=2; }
+            else if(bbox.height<(inith/forward_backward_threshold)) { // forward
+                Forward_Backward=1; }
+            else { // stop
+                Forward_Backward=0; }
+            if(bbox.x+bbox.width/2>initx*right_left_threshold) { // turn right
+                Left_Right=2; }
+            else if(bbox.x+bbox.width/2<initx/right_left_threshold) { // turn left
+                Left_Right=1; }
+            else { // stop
+                Left_Right=0; }
         }
         else
         {
@@ -141,39 +161,33 @@ int main(int argc, char **argv)
             // putText(frame, "Tracking failure detected", Point(100,80), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0,0,255),2);
             cout<<"\rTracking failure detected            ";
             cout.flush();
+
+            // Tell arduino not to move
+            Left_Right=0;
+            Forward_Backward=0;
         }
          
         // Display tracker type on frame
         // putText(frame, trackerType + " Tracker", Point(100,20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(50,170,50),2);
         
-        // determine whether need move
-        int Forward_Backward=0; // 0=stop, 1=forward, 2=backward;
-        int Left_Right=0; // 0=stop, 1=left, 2=right
-        double forward_backward_threshold=1.1;
-        double right_left_threshold=1.15;
-        if(bbox.height>(inith*forward_backward_threshold)) { // backward
-            Forward_Backward=1; }
-        else if(bbox.height<(inith/forward_backward_threshold)) { // forward
-            Forward_Backward=2; }
-        else { // stop
-            Forward_Backward=0; }
-        if(bbox.x+bbox.width/2>initx*right_left_threshold) { // turn right
-            Left_Right=2; }
-        else if(bbox.x+bbox.width/2<initx/right_left_threshold) { // turn left
-            Left_Right=1; }
-        else { // stop
-            Left_Right=0; }
+        
 
         // send the command through i2c
         unsigned char buffer[1];
         //Forward_Backward = 0;
-	//Left_Right = 0;
+        //Left_Right = 0;
         buffer[0] = Forward_Backward * 3 + Left_Right;
+        std::cout << Forward_Backward << " " << Left_Right;
+        cout.flush();
         if (write(file_i2c, buffer, 1) != 1)
         {
-	    std::cout << "Failed to write to the i2c bus.";
-        }	
-	        
+            cout << "Failed to write to the i2c bus.";
+        }
+        else
+        {
+            cout << "                               ";
+        }
+            
         FrameCounter++;
 
         if(FrameCounter%45==0)
@@ -193,7 +207,7 @@ int main(int argc, char **argv)
             if (write(file_i2c, buffer, 1) != 1)
             {
                 std::cout << "Failed to write to the i2c bus.";
-            }	
+            }   
             cout<<endl;
             break;
         }
