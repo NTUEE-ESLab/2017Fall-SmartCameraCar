@@ -31,19 +31,20 @@ int main(int argc, char **argv)
 
     // Initiate i2c setting
     // Open the i2c bus
-	if ((file_i2c = open(devName, O_RDWR)) < 0)
-	{
-			std::cout << "Failed to open the i2c bus\n";
-			return 0;
-	}
-
-	// Set the I2C address of the slave
+    int file_i2c;
+    if ((file_i2c = open(devName, O_RDWR)) < 0)
+    {
+        std::cout << "Failed to open the i2c bus\n";
+	return 0;
+    }
+    
+    // Set the I2C address of the slave
     int addr = 0x04;
-	if (ioctl(file_i2c, I2C_SLAVE, addr) < 0)
-	{
-			std::cout << "Failed to acquire bus access and/or talk to slave..\n";
-			return 0;
-	}
+    if (ioctl(file_i2c, I2C_SLAVE, addr) < 0)
+    {
+        std::cout << "Failed to acquire bus access and/or talk to slave..\n";
+        return 0;
+    }
     
     // List of tracker types in OpenCV 3.2
     // NOTE : GOTURN implementation is buggy and does not work.
@@ -96,10 +97,10 @@ int main(int argc, char **argv)
     bool ok = video.read(frame);
      
     // Define initial boundibg box
-    Rect2d bbox(287, 23, 86, 320);
+    Rect2d bbox(120, 80, 86, 80);
      
     // Uncomment the line below to select a different bounding box
-    bbox = selectROI(frame, false);
+    //bbox = selectROI(frame, false);
     
     double initx=bbox.x+bbox.width/2;
     double inity=bbox.y+bbox.height/2;
@@ -115,7 +116,7 @@ int main(int argc, char **argv)
 
     // while(video.read(frame))
     while(1)
-    {     
+    { 
         video>>frame;
         // Start timer
         double timer = (double)getTickCount();
@@ -148,14 +149,14 @@ int main(int argc, char **argv)
         // determine whether need move
         int Forward_Backward=0; // 0=stop, 1=forward, 2=backward;
         int Left_Right=0; // 0=stop, 1=left, 2=right
-        double threshold=1.05;
+        double threshold=1.1;
         if(bbox.height>(inith*threshold)) { // backward
-            Forward_Backward=2; }
-        else if(bbox.height<(inith/threshold)) { // forward
             Forward_Backward=1; }
+        else if(bbox.height<(inith/threshold)) { // forward
+            Forward_Backward=2; }
         else { // stop
             Forward_Backward=0; }
-        if(bbox.x+bbox.width/2>intix*threshold) { // turn right
+        if(bbox.x+bbox.width/2>initx*threshold) { // turn right
             Left_Right=2; }
         else if(bbox.x+bbox.width/2<initx/threshold) { // turn left
             Left_Right=1; }
@@ -163,14 +164,14 @@ int main(int argc, char **argv)
             Left_Right=0; }
 
         // send the command through i2c
-        int a = 1, b = 2;
-		unsigned char buffer[2];
-		buffer[0] = Forward_Backward;
-		buffer[1] = Left_Right;
-		if (write(file_i2c, buffer, 2) != 2)
+        unsigned char buffer[1];
+        //Forward_Backward = 0;
+	Left_Right = 0;
+        buffer[0] = Forward_Backward * 3 + Left_Right;
+        if (write(file_i2c, buffer, 1) != 1)
         {
-		    std::cout << "Failed to write to the i2c bus.\n";
-		}	
+	    std::cout << "Failed to write to the i2c bus.";
+        }	
 	        
         FrameCounter++;
 
@@ -187,6 +188,11 @@ int main(int argc, char **argv)
         int k = waitKey(1);
         if(k == 27)
         {
+            buffer[0] = 0;
+            if (write(file_i2c, buffer, 1) != 1)
+            {
+                std::cout << "Failed to write to the i2c bus.";
+            }	
             cout<<endl;
             break;
         }
