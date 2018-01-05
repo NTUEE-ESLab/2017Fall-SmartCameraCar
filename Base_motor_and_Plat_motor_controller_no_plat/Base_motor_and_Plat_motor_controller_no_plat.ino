@@ -63,15 +63,6 @@ void hardstop()
 }
 void forward()
 {
-  digitalWrite(in1, HIGH);
-  digitalWrite(in2, LOW);
-  analogWrite(enA, moveSpeed-deltaSpeed);
-  digitalWrite(in3, HIGH);
-  digitalWrite(in4, LOW);
-  analogWrite(enB, moveSpeed);
-}
-void backward()
-{
   digitalWrite(in1, LOW);
   digitalWrite(in2, HIGH);
   analogWrite(enA, moveSpeed-deltaSpeed);
@@ -79,7 +70,16 @@ void backward()
   digitalWrite(in4, HIGH);
   analogWrite(enB, moveSpeed);
 }
-void right()
+void backward()
+{
+  digitalWrite(in1, HIGH);
+  digitalWrite(in2, LOW);
+  analogWrite(enA, moveSpeed-deltaSpeed);
+  digitalWrite(in3, HIGH);
+  digitalWrite(in4, LOW);
+  analogWrite(enB, moveSpeed);
+}
+void left()
 {
   digitalWrite(in1, LOW);
   digitalWrite(in2, HIGH);
@@ -91,7 +91,7 @@ void right()
   // set speed to 200 out of possible range 0~255
   analogWrite(enB, rotateSpeed);
 }
-void left()
+void right()
 {
   // this function will run the motors in both directions at a fixed speed
   // turn on motor A
@@ -110,11 +110,11 @@ void loop()
   
     if (right_left == 1)
     {
-      right ();
+      left ();
     }
     else if (right_left == 2)
     {
-      left ();
+      right ();
     }
     else if (forward_backward == 1)
     {
