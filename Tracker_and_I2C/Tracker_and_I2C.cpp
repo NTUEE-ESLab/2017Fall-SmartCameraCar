@@ -4,8 +4,14 @@
 #include <opencv2/core/utility.hpp>
 #include <opencv2/videoio.hpp>
 #include <opencv2/highgui.hpp>
+#include <opencv2/dnn.hpp>
+#include <opencv2/dnn/shape_utils.hpp>
+#include <opencv2/imgproc.hpp>
 #include <iostream>
 #include <cstring>
+#include <fstream>
+#include <algorithm>
+#include <cstdlib>
 
 // the i2c dependencies
 #include <unistd.h>
@@ -15,7 +21,8 @@
 
 using namespace cv;
 using namespace std;
- 
+using namespace cv::dnn;
+
 // Convert to string
 #define SSTR( x ) static_cast< std::ostringstream & >( \
 ( std::ostringstream() << std::dec << x ) ).str()
@@ -45,8 +52,23 @@ int main(int argc, char **argv)
         std::cout << "Failed to acquire bus access and/or talk to slave..\n";
         return 0;
     }
-    
-    // List of tracker types in OpenCV 3.2
+
+    // load the yolo detector NN
+    dnn::Net net = readNetFromDarknet("../yolo_data/tiny-yolo-voc.cfg", "../yolo_data/tiny-yolo-voc.weights");
+    if (net.empty()) { cerr<<"Cannot Load network file!\n"; exit(-1); }
+
+    // load the yolo class name
+    vector<String> classNamesVec;
+    ifstream classNamesFile("../yolo_data/voc.names");
+    if (classNamesFile.is_open())
+    {
+        string className = "";
+        while (std::getline(classNamesFile, className))
+            classNamesVec.push_back(className);
+    }
+    else { cerr<<"Cannot Load class name!\n"; exit(-1); }
+
+    // List of tracker types in OpenCV 3.3
     // NOTE : GOTURN implementation is buggy and does not work.
     string trackerTypes[6] = {"BOOSTING", "MIL", "KCF", "TLD","MEDIANFLOW", "GOTURN"};
     // vector <string> trackerTypes(types, std::end(types));
@@ -55,28 +77,20 @@ int main(int argc, char **argv)
     string trackerType = trackerTypes[4];
  
     Ptr<Tracker> tracker;
-    // Tracker* tracker;
  
-    #if (CV_MINOR_VERSION < 3)
-    {
-        tracker = Tracker::create(trackerType);
-    }
-    #else
-    {
-        if (trackerType == "BOOSTING")
-            tracker = TrackerBoosting::create();
-        if (trackerType == "MIL")
-            tracker = TrackerMIL::create();
-        if (trackerType == "KCF")
-            tracker = TrackerKCF::create();
-        if (trackerType == "TLD")
-            tracker = TrackerTLD::create();
-        if (trackerType == "MEDIANFLOW")
-            tracker = TrackerMedianFlow::create();
-        if (trackerType == "GOTURN")
-            tracker = TrackerGOTURN::create();
-    }
-    #endif
+    if (trackerType == "BOOSTING")
+        tracker = TrackerBoosting::create();
+    if (trackerType == "MIL")
+        tracker = TrackerMIL::create();
+    if (trackerType == "KCF")
+        tracker = TrackerKCF::create();
+    if (trackerType == "TLD")
+        tracker = TrackerTLD::create();
+    if (trackerType == "MEDIANFLOW")
+        tracker = TrackerMedianFlow::create();
+    if (trackerType == "GOTURN")
+        tracker = TrackerGOTURN::create();
+    
     // Read video
     // VideoCapture video("video-1509343693.mp4");
     VideoCapture video(0);
@@ -84,7 +98,7 @@ int main(int argc, char **argv)
     // Exit if video is not opened
     if(!video.isOpened())
     {
-        cout << "Could not read video file" << endl;
+        cerr << "Could not read video file" << endl;
         return 1;         
     }
 
@@ -99,8 +113,55 @@ int main(int argc, char **argv)
     // Define initial boundibg box
     Rect2d bbox(120, 80, 86, 80);
      
-    // Uncomment the line below to select a different bounding box
-    bbox = selectROI(frame, false);
+    // Manual select a bounding box
+    // bbox = selectROI(frame, false);
+
+    // use detection to select a bounding box
+    if (frame.channels() == 4)
+        cvtColor(frame, frame, COLOR_BGRA2BGR);
+    Mat inputBlob = blobFromImage(frame, 1 / 255.F, Size(416, 416), Scalar(), true, false); //Convert Mat to batch of images
+    net.setInput(inputBlob, "data");                   //set the network input
+    Mat detectionMat = net.forward("detection_out");   //compute output
+    float confidenceThreshold = parser.get<float>("min_confidence");
+    for (int i = 0; i < detectionMat.rows; i++)
+    {
+        const int probability_index = 5;
+        const int probability_size = detectionMat.cols - probability_index;
+        float *prob_array_ptr = &detectionMat.at<float>(i, probability_index);
+        size_t objectClass = max_element(prob_array_ptr, prob_array_ptr + probability_size) - prob_array_ptr;
+        float confidence = detectionMat.at<float>(i, (int)objectClass + probability_index);
+        if (confidence > confidenceThreshold)
+        {
+            float x_center = detectionMat.at<float>(i, 0) * frame.cols;
+            float y_center = detectionMat.at<float>(i, 1) * frame.rows;
+            float width = detectionMat.at<float>(i, 2) * frame.cols;
+            float height = detectionMat.at<float>(i, 3) * frame.rows;
+            Point p1(cvRound(x_center - width / 2), cvRound(y_center - height / 2));
+            Point p2(cvRound(x_center + width / 2), cvRound(y_center + height / 2));
+            Rect object(p1, p2);
+            Scalar object_roi_color(0, 255, 0);
+            if (object_roi_style == "box")
+            {
+                rectangle(frame, object, object_roi_color);
+            }
+            else
+            {
+                Point p_center(cvRound(x_center), cvRound(y_center));
+                line(frame, object.tl(), p_center, object_roi_color, 1);
+            }
+            String className = objectClass < classNamesVec.size() ? classNamesVec[objectClass] : cv::format("unknown(%d)", objectClass);
+            String label = format("%s: %.2f", className.c_str(), confidence);
+            int baseLine = 0;
+            Size labelSize = getTextSize(label, FONT_HERSHEY_SIMPLEX, 0.5, 1, &baseLine);
+            rectangle(frame, Rect(p1, Size(labelSize.width, labelSize.height + baseLine)),
+                      object_roi_color, CV_FILLED);
+            putText(frame, label, p1 + Point(0, labelSize.height),
+                    FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0,0,0));
+        }
+    }
+    imshow("YOLO: Detections", frame);
+    // if (waitKey(1) >= 0) break;
+
     
     double initx=bbox.x+bbox.width/2;
     double inity=bbox.y+bbox.height/2;
