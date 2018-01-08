@@ -157,10 +157,19 @@ int main(int argc, char **argv)
                       object_roi_color, CV_FILLED);
             putText(frame, label, p1 + Point(0, labelSize.height),
                     FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0,0,0));
+
+            if(className=="person") // choose the init bbox
+            {
+                bbox.x=x_center+width/2;
+                bbox.y=y_center+height/2;
+                bbox.height=height;
+                bbox.width=width;
+            }
         }
     }
     imshow("YOLO: Detections", frame);
     // if (waitKey(1) >= 0) break;
+    waitKey(1);
 
     
     double initx=bbox.x+bbox.width/2;
