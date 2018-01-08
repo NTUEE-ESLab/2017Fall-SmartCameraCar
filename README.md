@@ -80,3 +80,50 @@ Then reboot the pi.
 Install I2C tool
 
 >sudo apt-get install i2c-tools
+
+### Install Darknet-NNPACK
+
+You need to install PeachPy and confu
+
+>sudo pip install --upgrade git+https://github.com/Maratyszcza/PeachPy  
+>sudo pip install --upgrade git+https://github.com/Maratyszcza/confu  
+
+Also you need to install Ninja
+
+>git clone https://github.com/ninja-build/ninja.git  
+>cd ninja  
+>git checkout release  
+>./configure.py --bootstrap  
+>export NINJA_PATH=$PWD  
+
+Install clang
+
+>sudo apt-get install clang  
+
+Install NNPACK-darknet
+
+>git clone https://github.com/thomaspark-pkj/NNPACK-darknet.git  
+>cd NNPACK-darknet  
+>confu setup  
+>python ./configure.py --backend auto  
+>$NINJA_PATH/ninja  
+>sudo cp -a lib/* /usr/lib/  
+>sudo cp include/nnpack.h /usr/include/  
+>sudo cp deps/pthreadpool/include/pthreadpool.h /usr/include/  
+
+Build darknet-nnpack
+
+>git clone https://github.com/thomaspark-pkj/darknet-nnpack.git  
+>cd darknet-nnpack  
+
+Then edit the Makefile to build darknet-nnpack for opencv
+
+>vim Makefile  
+
+Edit the 3rd line of the makefile
+
+>OPENCV=1  
+
+Then make it
+
+>make  
