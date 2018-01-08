@@ -100,7 +100,7 @@ int main(int argc, char **argv)
     Rect2d bbox(120, 80, 86, 80);
      
     // Uncomment the line below to select a different bounding box
-    bbox = selectROI(frame, false);
+    //bbox = selectROI(frame, false);
     
     double initx=bbox.x+bbox.width/2;
     double inity=bbox.y+bbox.height/2;
@@ -145,19 +145,22 @@ int main(int argc, char **argv)
 
             // determine whether need move
             if(bbox.height>(inith*forward_backward_threshold)) { // backward
-                Forward_Backward_Speed = bbox.height - forward_backward_threshold;
+                Forward_Backward_Speed = bbox.height - inith;
                 Forward_Backward=2; }
             else if(bbox.height<(inith/forward_backward_threshold)) { // forward
-                Forward_Backward_Speed = forward_backward_threshold - bbox.height;
+                Forward_Backward_Speed = inith - bbox.height;
                 Forward_Backward=1; }
             else { // stop
                 Forward_Backward_Speed = 0;
                 Forward_Backward=0; }
             if(bbox.x+bbox.width/2>initx*right_left_threshold) { // turn right
+                Left_Right_Speed = bbox.x+bbox.width/2-initx;
                 Left_Right=2; }
             else if(bbox.x+bbox.width/2<initx/right_left_threshold) { // turn left
+                Left_Right_Speed = initx-bbox.x-bbox.width/2;
                 Left_Right=1; }
             else { // stop
+                Left_Right_Speed = 0;
                 Left_Right=0; }
         }
         else
@@ -169,7 +172,9 @@ int main(int argc, char **argv)
 
             // Tell arduino not to move
             Left_Right=0;
+            Left_Right_Speed = 0;
             Forward_Backward=0;
+            Forward_Backward_Speed=0;
         }
          
         // Display tracker type on frame
@@ -181,19 +186,44 @@ int main(int argc, char **argv)
         unsigned char buffer[1];
         //Forward_Backward = 0;
         //Left_Right = 0;
-        buffer[0] = Forward_Backward * 3 + Left_Right;
-        std::cout << Forward_Backward << " " << Left_Right << " " << Forward_Backward_Speed;
+        std::cout << Forward_Backward << " " << Left_Right << " " << Forward_Backward_Speed << " " << Left_Right_Speed;
         cout.flush();
+	bool WriteFail = false;
+
+        buffer[0] = 255;
         if (write(file_i2c, buffer, 1) != 1)
         {
-            cout << "Failed to write to the i2c bus.";
-        }
-        else
+            WriteFail = true;
+	}
+        
+	buffer[0] = Forward_Backward * 3 + Left_Right;
+        if (write(file_i2c, buffer, 1) != 1)
         {
-            cout << "                               ";
+            WriteFail = true;
+	}
+
+        buffer[0] = Forward_Backward_Speed;
+        if (write(file_i2c, buffer, 1) != 1)
+        {
+            WriteFail = true;
         }
             
-        FrameCounter++;
+        buffer[0] = Left_Right_Speed;
+        if (write(file_i2c, buffer, 1) != 1)
+        {
+            WriteFail = true;
+        }
+
+        if (WriteFail)
+        {
+            cout << "Failed to write to the i2c bus.";
+	}
+	else
+	{
+            cout << "                               ";
+	}
+
+	FrameCounter++;
 
         if(FrameCounter%45==0)
         {
@@ -216,6 +246,7 @@ int main(int argc, char **argv)
             cout<<endl;
             break;
         }
+	usleep(100000);
     }
     return 0;
 }
