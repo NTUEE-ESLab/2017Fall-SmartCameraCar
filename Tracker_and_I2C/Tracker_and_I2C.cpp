@@ -116,7 +116,9 @@ int main(int argc, char **argv)
 
     // for tracking movement
     int Forward_Backward=0; // 0=stop, 1=forward, 2=backward;
+    int Forward_Backward_Speed=0;
     int Left_Right=0; // 0=stop, 1=left, 2=right
+    int Left_Right_Speed=0;
     double forward_backward_threshold=1.1;
     double right_left_threshold=1.15;
 
@@ -143,10 +145,13 @@ int main(int argc, char **argv)
 
             // determine whether need move
             if(bbox.height>(inith*forward_backward_threshold)) { // backward
+                Forward_Backward_Speed = bbox.height - forward_backward_threshold;
                 Forward_Backward=2; }
             else if(bbox.height<(inith/forward_backward_threshold)) { // forward
+                Forward_Backward_Speed = forward_backward_threshold - bbox.height;
                 Forward_Backward=1; }
             else { // stop
+                Forward_Backward_Speed = 0;
                 Forward_Backward=0; }
             if(bbox.x+bbox.width/2>initx*right_left_threshold) { // turn right
                 Left_Right=2; }
@@ -177,7 +182,7 @@ int main(int argc, char **argv)
         //Forward_Backward = 0;
         //Left_Right = 0;
         buffer[0] = Forward_Backward * 3 + Left_Right;
-        std::cout << Forward_Backward << " " << Left_Right;
+        std::cout << Forward_Backward << " " << Left_Right << " " << Forward_Backward_Speed;
         cout.flush();
         if (write(file_i2c, buffer, 1) != 1)
         {
