@@ -122,7 +122,7 @@ int main(int argc, char **argv)
     Mat inputBlob = blobFromImage(frame, 1 / 255.F, Size(416, 416), Scalar(), true, false); //Convert Mat to batch of images
     net.setInput(inputBlob, "data");                   //set the network input
     Mat detectionMat = net.forward("detection_out");   //compute output
-    float confidenceThreshold = parser.get<float>("min_confidence");
+    // float confidenceThreshold = parser.get<float>("min_confidence");
     for (int i = 0; i < detectionMat.rows; i++)
     {
         const int probability_index = 5;
@@ -130,7 +130,8 @@ int main(int argc, char **argv)
         float *prob_array_ptr = &detectionMat.at<float>(i, probability_index);
         size_t objectClass = max_element(prob_array_ptr, prob_array_ptr + probability_size) - prob_array_ptr;
         float confidence = detectionMat.at<float>(i, (int)objectClass + probability_index);
-        if (confidence > confidenceThreshold)
+        // if (confidence > confidenceThreshold)
+        if(confidence>0.3)
         {
             float x_center = detectionMat.at<float>(i, 0) * frame.cols;
             float y_center = detectionMat.at<float>(i, 1) * frame.rows;
@@ -140,15 +141,15 @@ int main(int argc, char **argv)
             Point p2(cvRound(x_center + width / 2), cvRound(y_center + height / 2));
             Rect object(p1, p2);
             Scalar object_roi_color(0, 255, 0);
-            if (object_roi_style == "box")
-            {
+            // if (object_roi_style == "box")
+            // {
                 rectangle(frame, object, object_roi_color);
-            }
-            else
-            {
-                Point p_center(cvRound(x_center), cvRound(y_center));
-                line(frame, object.tl(), p_center, object_roi_color, 1);
-            }
+            // }
+            // else
+            // {
+            //     Point p_center(cvRound(x_center), cvRound(y_center));
+            //     line(frame, object.tl(), p_center, object_roi_color, 1);
+            // }
             String className = objectClass < classNamesVec.size() ? classNamesVec[objectClass] : cv::format("unknown(%d)", objectClass);
             String label = format("%s: %.2f", className.c_str(), confidence);
             int baseLine = 0;
