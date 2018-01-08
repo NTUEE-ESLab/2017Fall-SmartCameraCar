@@ -131,7 +131,7 @@ int main(int argc, char **argv)
         size_t objectClass = max_element(prob_array_ptr, prob_array_ptr + probability_size) - prob_array_ptr;
         float confidence = detectionMat.at<float>(i, (int)objectClass + probability_index);
         // if (confidence > confidenceThreshold)
-        if(confidence>0.3)
+        if(confidence>0.1)
         {
             float x_center = detectionMat.at<float>(i, 0) * frame.cols;
             float y_center = detectionMat.at<float>(i, 1) * frame.rows;
