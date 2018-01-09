@@ -161,8 +161,10 @@ int main(int argc, char **argv)
 
             if(className=="person") // choose the init bbox
             {
-                bbox.x=x_center+width/2;
-                bbox.y=y_center+height/2;
+                // bbox.x=x_center+width/2;
+                // bbox.y=y_center+height/2;
+                bbox.x=x_center;
+                bbox.y=y_center;
                 bbox.height=height;
                 bbox.width=width;
             }
@@ -170,7 +172,8 @@ int main(int argc, char **argv)
     }
     imshow("YOLO: Detections", frame);
     // if (waitKey(1) >= 0) break;
-    waitKey(1);
+    while(1) {
+        if(waitKey(1)==27) break; }
 
     
     double initx=bbox.x+bbox.width/2;
