@@ -33,6 +33,75 @@ using namespace cv::dnn;
 // The I2C bus: This is for V2 pi's. For V1 Model B you need i2c-0
 static const char *devName = "/dev/i2c-1";
 
+bool Target_Detector(string& TargetClass, Rect2d& bbox, Mat& frame, dnn::Net& net, vector<String>& classNamesVec)
+{
+    if (frame.channels() == 4)
+        cvtColor(frame, frame, COLOR_BGRA2BGR);
+    Mat inputBlob = blobFromImage(frame, 1 / 255.F, Size(416, 416), Scalar(), true, false); //Convert Mat to batch of images
+    net.setInput(inputBlob, "data");                   //set the network input
+    Mat detectionMat = net.forward("detection_out");   //compute output
+    // float confidenceThreshold = parser.get<float>("min_confidence");
+
+    bool detected=false;
+    float max_condidence=0; // the confidence of detecting certain terget
+
+    for (int i = 0; i < detectionMat.rows; i++)
+    {
+        const int probability_index = 5;
+        const int probability_size = detectionMat.cols - probability_index;
+        float *prob_array_ptr = &detectionMat.at<float>(i, probability_index);
+        size_t objectClass = max_element(prob_array_ptr, prob_array_ptr + probability_size) - prob_array_ptr;
+        float confidence = detectionMat.at<float>(i, (int)objectClass + probability_index);
+        // if (confidence > confidenceThreshold)
+        if(confidence>0.1)
+        {
+            float x_center = detectionMat.at<float>(i, 0) * frame.cols;
+            float y_center = detectionMat.at<float>(i, 1) * frame.rows;
+            float width = detectionMat.at<float>(i, 2) * frame.cols;
+            float height = detectionMat.at<float>(i, 3) * frame.rows;
+            Point p1(cvRound(x_center - width / 2), cvRound(y_center - height / 2));
+            Point p2(cvRound(x_center + width / 2), cvRound(y_center + height / 2));
+            Rect object(p1, p2);
+            Scalar object_roi_color(0, 255, 0);
+            // if (object_roi_style == "box")
+            // {
+                rectangle(frame, object, object_roi_color);
+            // }
+            // else
+            // {
+            //     Point p_center(cvRound(x_center), cvRound(y_center));
+            //     line(frame, object.tl(), p_center, object_roi_color, 1);
+            // }
+            String className = objectClass < classNamesVec.size() ? classNamesVec[objectClass] : cv::format("unknown(%d)", objectClass);
+            String label = format("%s: %.2f", className.c_str(), confidence);
+            int baseLine = 0;
+            Size labelSize = getTextSize(label, FONT_HERSHEY_SIMPLEX, 0.5, 1, &baseLine);
+            rectangle(frame, Rect(p1, Size(labelSize.width, labelSize.height + baseLine)),
+                      object_roi_color, CV_FILLED);
+            putText(frame, label, p1 + Point(0, labelSize.height),
+                    FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0,0,0));
+            cout<<label<<", x="<<x_center<<", y="<<y_center<<", h="<<height<<", w="<<width<<endl;
+
+            if(className==TargetClass) // choose the init bbox
+            {
+                detected=true;
+                if(confidence>max_condidence)
+                {
+                    max_condidence=confidence;
+                    bbox.x=x_center-width/2;
+                    bbox.y=y_center-height/2;
+                    bbox.height=height;
+                    bbox.width=width;
+                }
+            }
+        }
+    }
+    imshow("YOLO: Detections", frame);
+    // while(1) {
+    //     if(waitKey(1)==27) break; }
+    return detected;
+}
+
 int main(int argc, char **argv)
 {
 
@@ -117,63 +186,8 @@ int main(int argc, char **argv)
     // bbox = selectROI(frame, false);
 
     // use detection to select a bounding box
-    if (frame.channels() == 4)
-        cvtColor(frame, frame, COLOR_BGRA2BGR);
-    Mat inputBlob = blobFromImage(frame, 1 / 255.F, Size(416, 416), Scalar(), true, false); //Convert Mat to batch of images
-    net.setInput(inputBlob, "data");                   //set the network input
-    Mat detectionMat = net.forward("detection_out");   //compute output
-    // float confidenceThreshold = parser.get<float>("min_confidence");
-    for (int i = 0; i < detectionMat.rows; i++)
-    {
-        const int probability_index = 5;
-        const int probability_size = detectionMat.cols - probability_index;
-        float *prob_array_ptr = &detectionMat.at<float>(i, probability_index);
-        size_t objectClass = max_element(prob_array_ptr, prob_array_ptr + probability_size) - prob_array_ptr;
-        float confidence = detectionMat.at<float>(i, (int)objectClass + probability_index);
-        // if (confidence > confidenceThreshold)
-        if(confidence>0.1)
-        {
-            float x_center = detectionMat.at<float>(i, 0) * frame.cols;
-            float y_center = detectionMat.at<float>(i, 1) * frame.rows;
-            float width = detectionMat.at<float>(i, 2) * frame.cols;
-            float height = detectionMat.at<float>(i, 3) * frame.rows;
-            Point p1(cvRound(x_center - width / 2), cvRound(y_center - height / 2));
-            Point p2(cvRound(x_center + width / 2), cvRound(y_center + height / 2));
-            Rect object(p1, p2);
-            Scalar object_roi_color(0, 255, 0);
-            // if (object_roi_style == "box")
-            // {
-                rectangle(frame, object, object_roi_color);
-            // }
-            // else
-            // {
-            //     Point p_center(cvRound(x_center), cvRound(y_center));
-            //     line(frame, object.tl(), p_center, object_roi_color, 1);
-            // }
-            String className = objectClass < classNamesVec.size() ? classNamesVec[objectClass] : cv::format("unknown(%d)", objectClass);
-            String label = format("%s: %.2f", className.c_str(), confidence);
-            int baseLine = 0;
-            Size labelSize = getTextSize(label, FONT_HERSHEY_SIMPLEX, 0.5, 1, &baseLine);
-            rectangle(frame, Rect(p1, Size(labelSize.width, labelSize.height + baseLine)),
-                      object_roi_color, CV_FILLED);
-            putText(frame, label, p1 + Point(0, labelSize.height),
-                    FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0,0,0));
-
-            if(className=="person") // choose the init bbox
-            {
-                // bbox.x=x_center+width/2;
-                // bbox.y=y_center+height/2;
-                bbox.x=x_center;
-                bbox.y=y_center;
-                bbox.height=height;
-                bbox.width=width;
-            }
-        }
-    }
-    imshow("YOLO: Detections", frame);
-    // if (waitKey(1) >= 0) break;
-    while(1) {
-        if(waitKey(1)==27) break; }
+    string targetclass="person";
+    Target_Detector(targetclass,bbox,frame,net,classNamesVec);
 
     
     double initx=bbox.x+bbox.width/2;
@@ -185,6 +199,8 @@ int main(int argc, char **argv)
     // imshow("Tracking", frame);
      
     tracker->init(frame, bbox);
+
+    cout<<"inti bbox, x="<<bbox.x<<", y="<<bbox.y<<", h="<<bbox.height<<", w="<<bbox.width<<endl;
    
     int FrameCounter=0;
 
@@ -239,12 +255,19 @@ int main(int argc, char **argv)
             // Tell arduino not to move
             Left_Right=0;
             Forward_Backward=0;
+
+            if(Target_Detector(targetclass, bbox, frame, net, classNamesVec))
+            {
+                tracker->clear();
+                Ptr<Tracker> NewTracker = TrackerMedianFlow::create();
+                tracker=NewTracker;
+                tracker->init(frame,bbox);
+                cout<<"trakcer re-inited\n";
+            }
         }
          
         // Display tracker type on frame
         // putText(frame, trackerType + " Tracker", Point(100,20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(50,170,50),2);
-        
-        
 
         // send the command through i2c
         unsigned char buffer[1];
