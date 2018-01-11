@@ -1,6 +1,8 @@
 #The following macros should be defined.
 TARGET1=i2c-pi-arduino
 OBJECT1=i2c-pi-arduino.o
+TARGET2=hardstop
+OBJECT2=hardstop.o
 #TARGET1=i2c-pi-Arduino_Asynchronous_GPIO
 #OBJECT1=i2c-pi-Arduino_Asynchronous_GPIO.o
 CC=gcc
@@ -13,8 +15,10 @@ LD=g++
 C_FLAGS=
 # end of user configuration
 #
-ALL : $(TARGET1)
+ALL : $(TARGET1) $(TARGET2)
 $(TARGET1) : $(OBJECT1)
+	$(LD)  $^ $(LD_FLAGS) -o $@
+$(TARGET2) : $(OBJECT2)
 	$(LD)  $^ $(LD_FLAGS) -o $@
 %.o : %.c
 	$(CC) $(C_FLAGS) -c $<
@@ -22,4 +26,4 @@ $(TARGET1) : $(OBJECT1)
 	$(CXX) $(C_FLAGS) -c $<
 .PHONY: clean
 clean :
-	-rm -f $(OBJECT1)
+	-rm -f $(OBJECT1) $(OBJECT2)

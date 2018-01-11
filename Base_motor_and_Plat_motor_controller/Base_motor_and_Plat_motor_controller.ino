@@ -1,11 +1,19 @@
 #include <Wire.h>
 #include <Servo.h>
+#include <PID_v1.h>
 
 #define SLAVE_ADDRESS 0x04
 
+//I2C input
+int input[3];
 int inputDirection = 0;
+int inputVerticalSpeed = 0;
+int inputHorizontalSpeed = 0;
+int inputCount = 0;
 int forward_backward = 0;
 int right_left = 0;
+
+//L298n
 // motor one
 int enA = 11;
 int in1 = 10;
@@ -15,7 +23,19 @@ int in3 = 7;
 int in4 = 6;
 int enB = 5;
 
+//servo
 Servo myservo;
+
+//Define Variables we'll be connecting to
+double Setpoint, Input, Output;
+float Kp = 0.1;
+float Ki = 0.0;
+float Kd = 0.1;
+
+//PID
+PID myPID(&Input, &Output, &Setpoint, Kp, Ki, Kd, DIRECT);;
+
+//parameters
 int degree = 90;
 int deltaSpeed = 40;
 int moveSpeed = 150;
@@ -40,16 +60,39 @@ void setup()
   Wire.onReceive(receiveData);
 
   // 雲台馬達
-  myservo.attach(4);
+  myservo.attach(12);
+  
+  //pid
+  Setpoint = 1;  //dont care in our case
+  Input = 0;
+  myPID.SetMode(AUTOMATIC);
 }
 
 // callback for received data
-void receiveData(int byteCount){ 
+void receiveData(int byteCount){
   while(Wire.available()) {
-    inputDirection = Wire.read();
-    Serial.print(inputDirection);
-    forward_backward = (inputDirection)/3;
-    right_left = (inputDirection)%3;
+    int inputData = Wire.read();
+    Serial.print(inputCount);
+    Serial.print(' ');
+    Serial.print(inputData);
+    Serial.println();
+    
+    if (inputData == 255)
+    {
+      inputCount = 0;
+    }
+    input[inputCount] = inputData;
+    inputCount++;
+    if (inputCount == 4)
+    {
+      inputCount = 0;
+      inputDirection = input[1];
+      inputVerticalSpeed = input[2];
+      inputHorizontalSpeed = input[3];
+      forward_backward = (inputDirection)/3;
+      right_left = (inputDirection)%3;
+      Serial.println();
+    }
   }
 }
 void hardstop()
@@ -61,15 +104,6 @@ void hardstop()
   digitalWrite(in4, LOW);
   analogWrite(enB, 0);
 }
-void forward()
-{
-  digitalWrite(in1, HIGH);
-  digitalWrite(in2, LOW);
-  analogWrite(enA, moveSpeed-deltaSpeed);
-  digitalWrite(in3, HIGH);
-  digitalWrite(in4, LOW);
-  analogWrite(enB, moveSpeed);
-}
 void backward()
 {
   digitalWrite(in1, LOW);
@@ -79,7 +113,16 @@ void backward()
   digitalWrite(in4, HIGH);
   analogWrite(enB, moveSpeed);
 }
-void right()
+void forward()
+{
+  digitalWrite(in1, HIGH);
+  digitalWrite(in2, LOW);
+  analogWrite(enA, moveSpeed-deltaSpeed);
+  digitalWrite(in3, HIGH);
+  digitalWrite(in4, LOW);
+  analogWrite(enB, moveSpeed);
+}
+void left()
 {
   digitalWrite(in1, LOW);
   digitalWrite(in2, HIGH);
@@ -91,7 +134,7 @@ void right()
   // set speed to 200 out of possible range 0~255
   analogWrite(enB, rotateSpeed);
 }
-void left()
+void right()
 {
   // this function will run the motors in both directions at a fixed speed
   // turn on motor A
@@ -107,42 +150,19 @@ void left()
 }
 void loop()
 {
-  if (right_left == 2) // left
-  {
-    if (degree < 180)
+    myservo.write(97);
+    
+    if (right_left == 1)
     {
-      hardstop ();
-      myservo.write (degree++);
-      delay (servoSpeed);
-    }
-  }
-  else if (right_left == 1) // right
-  {
-    if (degree > 0)
-    {
-      hardstop ();
-      myservo.write (degree--);
-      delay (servoSpeed);
-    }
-  }
-  else
-  {
-    if (degree < 90)
-    {
-      myservo.write (degree++);
       left ();
-      delay (servoSpeed);
     }
-    else if (degree > 90)
+    else if (right_left == 2)
     {
-      myservo.write (degree--);
       right ();
-      delay (servoSpeed);
     }
     else if (forward_backward == 1)
     {
       forward ();
-      delay(1000);
     }
     else if (forward_backward == 2)
     {
@@ -152,5 +172,4 @@ void loop()
     {
       hardstop();
     }
-  }
 }
