@@ -30,16 +30,17 @@ int main ()
 	//----- WRITE BYTES -----
 	//while (true)
 	//{
-			int  a = 0 , b = 0;
-			unsigned char buffer[1];
-			buffer[0] = a*3+ b;
-			
-			if (write(file_i2c, buffer, 1) != 1)       
-	//write() returns the number of bytes actually written, if it doesn't match then an error occurred (e.g. no response from the device)
-			{
-					/* ERROR HANDLING: i2c transaction failed */
-					std::cout << "Failed to write to the i2c bus.\n";
-			}
+			//int  a = 0 , b = 0;
+			unsigned char buffer[0];
+			buffer[0] = 255;
+			write(file_i2c, buffer, 1);
+			buffer[0] = 0;
+			write(file_i2c, buffer, 1);
+			buffer[0] = 0;
+			write(file_i2c, buffer, 1);
+			buffer[0] = 0;
+			write(file_i2c, buffer, 1);
+				//write() returns the number of bytes actually written, if it doesn't match then an error occurred (e.g. no response from the device)
 	//}
 
 	return 0;
