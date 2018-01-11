@@ -260,10 +260,43 @@ int main(int argc, char **argv)
             cout.flush();
 
             // Tell arduino not to move
-            Left_Right=0;
-            Left_Right_Speed = 0;
-            Forward_Backward=0;
-            Forward_Backward_Speed=0;
+
+            // Left_Right=0;
+            // Left_Right_Speed = 0;
+            // Forward_Backward=0;
+            // Forward_Backward_Speed=0;
+
+            bool WriteFail = false;
+
+            buffer[0] = 255;
+            if (write(file_i2c, buffer, 1) != 1)
+            {
+                WriteFail = true;
+            }
+            
+            buffer[0] = 0;
+            if (write(file_i2c, buffer, 1) != 1)
+            {
+                WriteFail = true;
+            }
+            buffer[0] = 0;
+            if (write(file_i2c, buffer, 1) != 1)
+            {
+                WriteFail = true;
+            }
+            buffer[0] = 0;
+            if (write(file_i2c, buffer, 1) != 1)
+            {
+                WriteFail = true;
+            }
+            if (WriteFail)
+            {
+                cout << "Failed to write to the i2c bus.";
+            }
+            else
+            {
+                    cout << "                               ";
+            }
 
             if(Target_Detector(targetclass, bbox, frame, net, classNamesVec))
             {
