@@ -34,7 +34,7 @@ int main ()
 			unsigned char buffer[0];
 			buffer[0] = 255;
 			write(file_i2c, buffer, 1);
-			buffer[0] = 0;
+			buffer[0] = 1;
 			write(file_i2c, buffer, 1);
 			buffer[0] = 0;
 			write(file_i2c, buffer, 1);
