@@ -12,6 +12,7 @@
 #include <fstream>
 #include <algorithm>
 #include <cstdlib>
+#include <boost/asio.hpp>
 
 // the i2c dependencies
 #include <unistd.h>
@@ -22,6 +23,7 @@
 using namespace cv;
 using namespace std;
 using namespace cv::dnn;
+using namespace boost::asio;
 
 // Convert to string
 #define SSTR( x ) static_cast< std::ostringstream & >( \
@@ -103,6 +105,45 @@ bool Target_Detector(string& TargetClass, Rect2d& bbox, Mat& frame, dnn::Net& ne
     return detected;
 }
 
+bool Write_to_I2C(int& file_i2c,int& Forward_Backward,int& Forward_Backward_Speed,int& Left_Right,int& Left_Right_Speed)
+{
+    unsigned char buffer[1];
+    bool WriteFail = false;
+
+    buffer[0] = 255; // acknowledgement
+    if (write(file_i2c, buffer, 1) != 1)
+    {
+        WriteFail = true;
+    }
+    
+    buffer[0] = Forward_Backward * 3 + Left_Right;
+    if (write(file_i2c, buffer, 1) != 1)
+    {
+        WriteFail = true;
+    }
+
+    buffer[0] = Forward_Backward_Speed;
+    if (write(file_i2c, buffer, 1) != 1)
+    {
+        WriteFail = true;
+    }
+        
+    buffer[0] = Left_Right_Speed;
+    if (write(file_i2c, buffer, 1) != 1)
+    {
+        WriteFail = true;
+    }
+
+    if (WriteFail)
+    {
+        cout << "Failed to write to the i2c bus.";
+    }
+    else
+    {
+        cout << "                               ";
+    }   
+}
+
 int main(int argc, char **argv)
 {
 
@@ -122,6 +163,14 @@ int main(int argc, char **argv)
         std::cout << "Failed to acquire bus access and/or talk to slave..\n";
         return 0;
     }
+
+    // setup socket
+    io_service iosev;
+    ip::tcp::acceptor acceptor(iosev, 
+    ip::tcp::endpoint(ip::tcp::v4(), 1000));
+    ip::tcp::socket socket(iosev); // may block the program here
+    acceptor.accept(socket);
+    std::cout << socket.remote_endpoint().address() << std::endl;
 
     // load the yolo detector NN
     dnn::Net net = readNetFromDarknet("../yolo_data/tiny-yolo-voc.cfg", "../yolo_data/tiny-yolo-voc.weights");
@@ -261,44 +310,7 @@ int main(int argc, char **argv)
             cout.flush();
 
             // Tell arduino not to move
-
-            // Left_Right=0;
-            // Left_Right_Speed = 0;
-            // Forward_Backward=0;
-            // Forward_Backward_Speed=0;
-
-            unsigned char buffer[1];
-            bool WriteFail = false;
-
-            buffer[0] = 255;
-            if (write(file_i2c, buffer, 1) != 1)
-            {
-                WriteFail = true;
-            }
-            
-            buffer[0] = 0;
-            if (write(file_i2c, buffer, 1) != 1)
-            {
-                WriteFail = true;
-            }
-            buffer[0] = 0;
-            if (write(file_i2c, buffer, 1) != 1)
-            {
-                WriteFail = true;
-            }
-            buffer[0] = 0;
-            if (write(file_i2c, buffer, 1) != 1)
-            {
-                WriteFail = true;
-            }
-            if (WriteFail)
-            {
-                cout << "Failed to write to the i2c bus.";
-            }
-            else
-            {
-                    cout << "                               ";
-            }
+            Write_to_I2C(file_i2c,0,0,0,0);
 
             if(Target_Detector(targetclass, bbox, frame, net, classNamesVec))
             {
@@ -320,42 +332,8 @@ int main(int argc, char **argv)
         std::cout << Forward_Backward << " " << Left_Right << " " << Forward_Backward_Speed << " " << Left_Right_Speed;
         cout.flush();
 
-        unsigned char buffer[1];
-        bool WriteFail = false;
-
-        buffer[0] = 255;
-        if (write(file_i2c, buffer, 1) != 1)
-        {
-            WriteFail = true;
-        }
+        Write_to_I2C(file_i2c, Forward_Backward,Forward_Backward_Speed,Left_Right,Left_Right_Speed);
         
-        buffer[0] = Forward_Backward * 3 + Left_Right;
-        if (write(file_i2c, buffer, 1) != 1)
-        {
-            WriteFail = true;
-        }
-
-        buffer[0] = Forward_Backward_Speed;
-        if (write(file_i2c, buffer, 1) != 1)
-        {
-            WriteFail = true;
-        }
-            
-        buffer[0] = Left_Right_Speed;
-        if (write(file_i2c, buffer, 1) != 1)
-        {
-            WriteFail = true;
-        }
-
-        if (WriteFail)
-        {
-            cout << "Failed to write to the i2c bus.";
-        }
-        else
-        {
-                cout << "                               ";
-        }
-
         FrameCounter++;
 
         if(FrameCounter%45==0)
@@ -372,41 +350,7 @@ int main(int argc, char **argv)
         int k = waitKey(1);
         if(k == 27)
         {
-            unsigned char buffer[1];
-            bool WriteFail = false;
-
-            buffer[0] = 255;
-            if (write(file_i2c, buffer, 1) != 1)
-            {
-                WriteFail = true;
-            }
-            
-            buffer[0] = Forward_Backward * 3 + Left_Right;
-            if (write(file_i2c, buffer, 1) != 1)
-            {
-                WriteFail = true;
-            }
-
-            buffer[0] = Forward_Backward_Speed;
-            if (write(file_i2c, buffer, 1) != 1)
-            {
-                WriteFail = true;
-            }
-                
-            buffer[0] = Left_Right_Speed;
-            if (write(file_i2c, buffer, 1) != 1)
-            {
-                WriteFail = true;
-            }
-
-            if (WriteFail)
-            {
-                cout << "Failed to write to the i2c bus.";
-            }
-            else
-            {
-                    cout << "                               ";
-            }
+            Write_to_I2C(file_i2c,0,0,0,0);
             cout<<endl;
             break;
         }
