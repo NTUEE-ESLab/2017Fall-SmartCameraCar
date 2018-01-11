@@ -32,7 +32,7 @@ def gen():
     #         raise RuntimeError('Could not start camera.')
     while True:
         # _, img = camera.read()
-        img=imread("frame.jpg")
+        img=cv2.imread("frame.jpg")
         frame = cv2.imencode('.jpg', img)[1].tobytes()
         # print(frame)
         print(len(frame))

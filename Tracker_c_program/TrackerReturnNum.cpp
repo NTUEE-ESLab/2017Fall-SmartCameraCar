@@ -122,6 +122,7 @@ int main(int argc, char **argv)
 
 	        // Display frame.
 	        imshow("Tracking", frame);
+            imwrite("frame.jpg",frame);
 	}
          
         // Exit if ESC pressed.
