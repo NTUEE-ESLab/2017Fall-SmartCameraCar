@@ -97,6 +97,7 @@ bool Target_Detector(string& TargetClass, Rect2d& bbox, Mat& frame, dnn::Net& ne
         }
     }
     imshow("YOLO: Detections", frame);
+    imwrite("frame.jpg",frame);
     // while(1) {
     //     if(waitKey(1)==27) break; }
     return detected;
@@ -364,6 +365,7 @@ int main(int argc, char **argv)
 
             // Display frame.
             imshow("Tracking", frame);
+            imwrite("frame.jpg",frame);
         }
          
         // Exit if ESC pressed.
