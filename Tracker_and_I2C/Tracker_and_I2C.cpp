@@ -266,6 +266,7 @@ int main(int argc, char **argv)
             // Forward_Backward=0;
             // Forward_Backward_Speed=0;
 
+            unsigned char buffer[1];
             bool WriteFail = false;
 
             buffer[0] = 255;
