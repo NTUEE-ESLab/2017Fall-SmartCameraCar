@@ -313,11 +313,13 @@ int main(int argc, char **argv)
         // putText(frame, trackerType + " Tracker", Point(100,20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(50,170,50),2);
 
         // send the command through i2c
-        unsigned char buffer[1];
+        
         //Forward_Backward = 0;
         //Left_Right = 0;
         std::cout << Forward_Backward << " " << Left_Right << " " << Forward_Backward_Speed << " " << Left_Right_Speed;
         cout.flush();
+
+        unsigned char buffer[1];
         bool WriteFail = false;
 
         buffer[0] = 255;
@@ -368,11 +370,41 @@ int main(int argc, char **argv)
         int k = waitKey(1);
         if(k == 27)
         {
-            buffer[0] = 0;
+            unsigned char buffer[1];
+            bool WriteFail = false;
+
+            buffer[0] = 255;
             if (write(file_i2c, buffer, 1) != 1)
             {
-                std::cout << "Failed to write to the i2c bus.";
-            }   
+                WriteFail = true;
+            }
+            
+            buffer[0] = Forward_Backward * 3 + Left_Right;
+            if (write(file_i2c, buffer, 1) != 1)
+            {
+                WriteFail = true;
+            }
+
+            buffer[0] = Forward_Backward_Speed;
+            if (write(file_i2c, buffer, 1) != 1)
+            {
+                WriteFail = true;
+            }
+                
+            buffer[0] = Left_Right_Speed;
+            if (write(file_i2c, buffer, 1) != 1)
+            {
+                WriteFail = true;
+            }
+
+            if (WriteFail)
+            {
+                cout << "Failed to write to the i2c bus.";
+            }
+            else
+            {
+                    cout << "                               ";
+            }
             cout<<endl;
             break;
         }
