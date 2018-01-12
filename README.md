@@ -6,7 +6,12 @@
 >b03901004  
 >b03901162 
 
+## Menu
 * [Webpage](https://ntuee-eslab.github.io/2017Fall-SmartCameraCar/webpage/index.html)
+* [Introduction](https://github.com/NTUEE-ESLab/2017Fall-SmartCameraCar#introduction)
+* [Motivation](https://github.com/NTUEE-ESLab/2017Fall-SmartCameraCar#motivation)
+* [Requirements](https://github.com/NTUEE-ESLab/2017Fall-SmartCameraCar#requirements)
+* [Before use the code](https://github.com/NTUEE-ESLab/2017Fall-SmartCameraCar#before-use-the-code)
 
 ## Introduction
 This is a small camera car that can follow your motion and shot video for you.
@@ -21,7 +26,7 @@ Then we built this Smart Camera Car, everybody can use it.
 ## Requirements
 
 ### Hardwares
-- Raspberry pi 3 (Model B)
+- Raspberry pi 3 (Model B), with micro sd card larger than 16GB
 - Raspberry pi camera module with cable longer than 30cm
 - Arduino uno
 - L298N
@@ -175,3 +180,26 @@ Install I2C tool
 >sudo apt-get install i2c-tools
 
 ### For Arduino:  
+Use Arduino IDE to burn the code in *** into Arduino
+[](add file location)
+
+### Build the car
+Please refer to the webpage.
+[](add hyper link)
+
+## Usage
+After setup the whole car, turn on Arduino, Raspberry pi and the whole power.  
+On Raspberry pi, you should run 2 programs.  
+The `myapp_opencv` setup a server for webpage monitering.  
+The `Tracker_and_I2C` is the main tracking program.  
+
+> cd RPi_programs  
+> python3 myapp_opencv.py &  
+> ./Tracker_and_I2C  
+
+After run the programs, stay in front of the camera for a while, and the car will automatically start tracking you.  
+You can use devices connected to the same LAN as RPi, and use web browser to `<RPi IP>:5000`, and you can moniter the car.
+
+If the tracking fail, press `esc` key to terminate the program.
+If you kill the program directly, the car may still runing.  Then run the `hardstop` program to stop it.
+If you see `Address already in use` error while use `myapp_opencv.py`, then follow the steps below:
