@@ -3,35 +3,26 @@
 from importlib import import_module
 import os
 from flask import Flask, render_template, Response
-import socket
-import sys
+
+# import camera driver
+# if os.environ.get('CAMERA'):
+#     Camera = import_module('camera_' + os.environ['CAMERA']).Camera
+# else:
+    # from camera import Camera
+
+# from camera_opencv import Camera
 import cv2
 
-HOST, PORT = "localhost", 1000
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-# try:
-    # Connect to server
-sock.connect((HOST, PORT))
+# Raspberry Pi camera module (requires picamera package)
+# from camera_pi import Camera
 
 app = Flask(__name__)
 
-# @app.route('/')
-# def index():
-#     """Video streaming home page."""
-#     return render_template('index.html')
 
 @app.route('/')
-@app.route('/<cmd>')
-def index(cmd=None):
-    if cmd == 'go':
-        data='g'
-        sock.sendall(bytes(data + "\n", "utf-8"))
-        print("go")
-    elif cmd=='stop':
-        data='s'
-        sock.sendall(bytes(data + "\n", "utf-8"))
-        print("stop")
-    return render_template('index.html',cmd=cmd)
+def index():
+    """Video streaming home page."""
+    return render_template('index.html')
 
 
 def gen():

@@ -99,7 +99,7 @@ bool Target_Detector(string& TargetClass, Rect2d& bbox, Mat& frame, dnn::Net& ne
         }
     }
     imshow("YOLO: Detections", frame);
-    // imwrite("frame.jpg",frame);
+    imwrite("frame.jpg",frame);
     // while(1) {
     //     if(waitKey(1)==27) break; }
     return detected;
@@ -226,11 +226,11 @@ int main(int argc, char **argv)
     Rect2d bbox(120, 80, 86, 80);
      
     // Manual select a bounding box
-    bbox = selectROI(frame, false);
+    // bbox = selectROI(frame, false);
 
     // use detection to select a bounding box
     string targetclass="person";
-    // Target_Detector(targetclass,bbox,frame,net,classNamesVec);
+    Target_Detector(targetclass,bbox,frame,net,classNamesVec);
 
     double initx=bbox.x+bbox.width/2;
     double inity=bbox.y+bbox.height/2;
@@ -357,7 +357,7 @@ int main(int argc, char **argv)
 
             // Display frame.
             imshow("Tracking", frame);
-            // imwrite("frame.jpg",frame);
+            imwrite("frame.jpg",frame);
         }
          
         // Exit if ESC pressed.
