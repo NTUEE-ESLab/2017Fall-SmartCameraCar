@@ -180,11 +180,11 @@ Install I2C tool
 >sudo apt-get install i2c-tools
 
 ### For Arduino:  
-Use Arduino IDE to burn the code in *** into Arduino
+Use Arduino IDE to burn the code in *** into Arduino.  
 [](add file location)
 
 ### Build the car
-Please refer to the webpage.
+Please refer to the webpage.  
 [](add hyper link)
 
 ## Usage
@@ -198,8 +198,20 @@ The `Tracker_and_I2C` is the main tracking program.
 > ./Tracker_and_I2C  
 
 After run the programs, stay in front of the camera for a while, and the car will automatically start tracking you.  
-You can use devices connected to the same LAN as RPi, and use web browser to `<RPi IP>:5000`, and you can moniter the car.
+You can use devices connected to the same LAN as RPi, and use web browser to `<RPi IP>:5000`, and you can moniter the car.  
 
-If the tracking fail, press `esc` key to terminate the program.
-If you kill the program directly, the car may still runing.  Then run the `hardstop` program to stop it.
-If you see `Address already in use` error while use `myapp_opencv.py`, then follow the steps below:
+### Note:
+
+If the tracking fail, press `esc` key to terminate the program.  
+If you kill the program directly, the car may still runing.  Then run the `hardstop` program to stop it.  
+If you see `Address already in use` error while use `myapp_opencv.py`, then follow the steps below:  
+
+If you don't have `lsof`, then install it by typing `sudo apt-get install lsof`. Use `lsof -i:5000` to find the program using the port 5000, and you can see the python PID, then `kill <python PID>`, and you can open `myapp_opencv.py` again.
+
+## Result
+Please see the webpage.  
+[](add link)
+
+## Reference
+Please see the webpage.  
+[](add link)
