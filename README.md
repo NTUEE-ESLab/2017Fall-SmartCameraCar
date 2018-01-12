@@ -6,7 +6,43 @@
 >b03901004  
 >b03901162 
 
+* [Webpage](https://ntuee-eslab.github.io/2017Fall-SmartCameraCar/webpage/index.html)
+
+## Introduction
+This is a small camera car that can follow your motion and shot video for you.
+
+## Motivation
+If you want to make a third-person video of yourself, but there are no helpers, and you don't have a good device, like a drone, to do that for you, how will you get it done?  
+We want to build a device to help we shot high quality, smooth videos.
+It should carry your own device, like cellphones or cameras, to ensure the video quality.  
+It should to be cheap.  
+Then we built this Smart Camera Car, everybody can use it.  
+
+## Requirements
+
+### Hardwares
+- Raspberry pi 3 (Model B)
+- Raspberry pi camera module with cable longer than 30cm
+- Arduino uno
+- L298N
+- 2 motors and wheels
+- 2 universal wheels
+- Tower Pro SG-90 servo motor
+- 2 output Powerbank (we use asus zenpower pro)
+- 8 AA battery and a battery box
+- car body (how to design it is up to you)
+
+### Softwares
+- C++
+- python3
+- OpenCV
+- darknet-nnpack
+
 ## Before use the code
+
+This Project contain 2 main devices, Raspberry pi and Arduino.  There are some preparation you should do before use it.
+
+### For Raspberry pi:  
 
 ### Install OpenCV
 
@@ -137,3 +173,5 @@ Then reboot the pi.
 Install I2C tool
 
 >sudo apt-get install i2c-tools
+
+### For Arduino:  
