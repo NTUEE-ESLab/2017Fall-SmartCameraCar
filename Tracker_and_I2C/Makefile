@@ -5,6 +5,7 @@ CC=gcc
 CC=gcc
 CXX=g++
 LD_FLAGS= `pkg-config --cflags --libs opencv` -lwiringPi
+LD_FLAGS+= -lboost_system -lpthread -lm
 C_FLAGS=
 # end of user configuration
 all: $(TARGET1)

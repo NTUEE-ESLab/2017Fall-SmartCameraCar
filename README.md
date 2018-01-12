@@ -10,6 +10,8 @@
 
 ### Install OpenCV
 
+####This is used for target detection and tracking.
+
 You should install OpenCV on the Raspberry pi  
 
 Intsall cmake and some other tools
@@ -49,39 +51,9 @@ Then install is finish.  To save the space, you can remove the source code folde
 
 >sudo rm -rf opencv opencv_contrib
 
-### Enable camera
-
-Insert the camra module onto Raspberry pi.  
-
-Enable the camera
-
->sudo raspi-config
-
-Then reboot the pi.
-
-After rebooting, you can use `vcgencmd get_camera` to check if the camera is available.  You should see the text below:
-
->supported=1 detected=1
-
-For OpenCV to use the camera, we should enable v4l2
-
->sudo modprobe bcm2835-v4l2
-
-Then you can see the camera device at `/dev/video0`, and you can use `VideoCapture video(0);` to get the camera frames.
-
-### Enable I2C
-
-Enable the I2C
-
->sudo raspi-config
-
-Then reboot the pi.
-
-Install I2C tool
-
->sudo apt-get install i2c-tools
-
 ### Install Darknet-NNPACK
+
+####This is used for detect target recognition.
 
 You need to install PeachPy and confu
 
@@ -127,3 +99,41 @@ Edit the 3rd line of the makefile
 Then make it
 
 >make  
+
+### Install flask
+
+####This is used for sending video stream to webpage.
+
+>sudo pip install Flask  
+
+### Enable camera
+
+Insert the camra module onto Raspberry pi.  
+
+Enable the camera
+
+>sudo raspi-config
+
+Then reboot the pi.
+
+After rebooting, you can use `vcgencmd get_camera` to check if the camera is available.  You should see the text below:
+
+>supported=1 detected=1
+
+For OpenCV to use the camera, we should enable v4l2
+
+>sudo modprobe bcm2835-v4l2
+
+Then you can see the camera device at `/dev/video0`, and you can use `VideoCapture video(0);` to get the camera frames.
+
+### Enable I2C
+
+Enable the I2C
+
+>sudo raspi-config
+
+Then reboot the pi.
+
+Install I2C tool
+
+>sudo apt-get install i2c-tools

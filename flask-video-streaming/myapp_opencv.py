@@ -34,8 +34,6 @@ def gen():
         # _, img = camera.read()
         img=cv2.imread("frame.jpg")
         frame = cv2.imencode('.jpg', img)[1].tobytes()
-        # print(frame)
-        print(len(frame))
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 

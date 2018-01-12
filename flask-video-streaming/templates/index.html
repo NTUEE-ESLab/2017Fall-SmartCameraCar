@@ -1,9 +1,38 @@
 <html>
   <head>
-    <title>Video Streaming Demonstration</title>
+    <title>WiFi Controlled Car (hophd.com)</title>
   </head>
   <body>
-    <h1>Video Streaming Demonstration</h1>
-    <img src="{{ url_for('video_feed') }}">
+    <center>
+ 
+ 
+ 
+<h1>WiFi Controlled Car (hophd.com)</h1>
+ 
+ 
+ 
+      <img src="{{ url_for('video_feed') }}">
+      <a href='/go'>Go</a> . 
+      <a href='/back'>Back</a> . 
+      <a href='/stop'>Stop</a> . 
+      <a href='/right'>Turn Right</a> . 
+      <a href='/left'>Turn Left</a>
+ 
+ 
+ 
+<hr>
+ 
+ 
+ 
+    {% if cmd %}
+ 
+ 
+ 
+<h2> Your Command: {{ cmd }} </h2>
+ 
+ 
+ 
+    {% endif %}
+    </center>
   </body>
 </html>
