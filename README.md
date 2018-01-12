@@ -10,7 +10,7 @@
 
 ### Install OpenCV
 
-####This is used for target detection and tracking.
+This is used for target detection and tracking.
 
 You should install OpenCV on the Raspberry pi  
 
@@ -53,7 +53,7 @@ Then install is finish.  To save the space, you can remove the source code folde
 
 ### Install Darknet-NNPACK
 
-####This is used for detect target recognition.
+This is used for detect target recognition.
 
 You need to install PeachPy and confu
 
@@ -102,7 +102,7 @@ Then make it
 
 ### Install flask
 
-####This is used for sending video stream to webpage.
+This is used for sending video stream to webpage.
 
 >sudo pip install Flask  
 
