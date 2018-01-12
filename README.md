@@ -39,6 +39,7 @@ Then we built this Smart Camera Car, everybody can use it.
 - 2 output Powerbank (we use asus zenpower pro)
 - 8 AA battery and a battery box
 - car body (how to design it is up to you)
+- [thrust bearing](https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Thrust-ball-bearing_din711_ex.png/800px-Thrust-ball-bearing_din711_ex.png)
 
 ### Softwares
 - C++
