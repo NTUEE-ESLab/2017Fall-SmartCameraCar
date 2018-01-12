@@ -52,7 +52,7 @@ This Project contain 2 main devices, Raspberry pi and Arduino.  There are some p
 
 ### For Raspberry pi:  
 
-### Install OpenCV
+### Install [OpenCV](https://opencv.org/)
 
 This is used for target detection and tracking.
 
@@ -109,7 +109,7 @@ Then install is finish.  To save the space, you can remove the source code folde
 sudo rm -rf opencv opencv_contrib
 ```
 
-### Install Darknet-NNPACK
+### Install [Darknet-NNPACK](https://github.com/digitalbrain79/darknet-nnpack)
 
 This is used for detect target recognition.
 
@@ -253,7 +253,8 @@ If the tracking fail, press `esc` key to terminate the program.
 If you kill the program directly, the car may still runing.  Then run the `hardstop` program to stop it.  
 If you see `Address already in use` error while use `myapp_opencv.py`, then follow the steps below:  
 
-If you don't have `lsof`, then install it by typing `sudo apt-get install lsof`. Use `lsof -i:5000` to find the program using the port 5000, and you can see the python PID, then `kill <python PID>`, and you can open `myapp_opencv.py` again.
+- If you don't have `lsof`, then install it by typing `sudo apt-get install lsof`. Use `lsof -i:5000` to find the program using the port 5000, and you can see the python PID, then `kill <python PID>`, and you can open `myapp_opencv.py` again.  
+[](check whether this show on the web)
 
 ## Result
 Please see the webpage.  
