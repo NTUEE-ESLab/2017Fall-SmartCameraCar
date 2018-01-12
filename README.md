@@ -63,23 +63,29 @@ You should install OpenCV on the Raspberry pi
 
 Intsall cmake and some other tools
 
->sudo apt-get install build-essential cmake pkg-config  
->sudo apt-get install libjpeg-dev libtiff5-dev libjasper-dev libpng12-dev  
->sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev  
->sudo apt-get install libxvidcore-dev libx264-dev  
->sudo apt-get install libgtk2.0-dev  
->sudo apt-get install libatlas-base-dev gfortran
+```bash
+sudo apt-get install build-essential cmake pkg-config  
+sudo apt-get install libjpeg-dev libtiff5-dev libjasper-dev libpng12-dev  
+sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev  
+sudo apt-get install libxvidcore-dev libx264-dev  
+sudo apt-get install libgtk2.0-dev  
+sudo apt-get install libatlas-base-dev gfortran
+```
 
 Then clone OpenCV and contrib repository.  cd to a directory, and 
 
->git clone https://github.com/opencv/opencv.git  
->git clone https://github.com/opencv/opencv_contrib.git
+```bash
+git clone https://github.com/opencv/opencv.git  
+git clone https://github.com/opencv/opencv_contrib.git
+```
 
 Then make a build directory and get into it, for example:
 
->cd opencv  
->mkdir build  
->cd build
+```bash
+cd opencv  
+mkdir build  
+cd build
+```
 
 Then use cmake to prepare the files
 
