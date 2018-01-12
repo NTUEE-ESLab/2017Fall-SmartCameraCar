@@ -284,19 +284,19 @@ int main(int argc, char **argv)
 
             // determine whether need move
             if(bbox.height>(inith*forward_backward_threshold)) { // backward
-                Forward_Backward_Speed = bbox.height - inith;
+                Forward_Backward_Speed = bbox.height - (inith*forward_backward_threshold);
                 Forward_Backward=2; }
             else if(bbox.height<(inith/forward_backward_threshold)) { // forward
-                Forward_Backward_Speed = inith - bbox.height;
+                Forward_Backward_Speed = (inith/forward_backward_threshold) - bbox.height;
                 Forward_Backward=1; }
             else { // stop
                 Forward_Backward_Speed = 0;
                 Forward_Backward=0; }
             if(bbox.x+bbox.width/2>initx*right_left_threshold) { // turn right
-                Left_Right_Speed = bbox.x+bbox.width/2-initx;
+                Left_Right_Speed = bbox.x+bbox.width/2-(initx* right_left_threshold);
                 Left_Right=2; }
             else if(bbox.x+bbox.width/2<initx/right_left_threshold) { // turn left
-                Left_Right_Speed = initx-bbox.x-bbox.width/2;
+                Left_Right_Speed = (initx/right_left_threshold)-bbox.x-bbox.width/2;
                 Left_Right=1; }
             else { // stop
                 Left_Right_Speed = 0;
