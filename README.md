@@ -12,6 +12,12 @@
 * [Motivation](https://github.com/NTUEE-ESLab/2017Fall-SmartCameraCar#motivation)
 * [Requirements](https://github.com/NTUEE-ESLab/2017Fall-SmartCameraCar#requirements)
 * [Before use the code](https://github.com/NTUEE-ESLab/2017Fall-SmartCameraCar#before-use-the-code)
+- [For Raspberry pi](https://github.com/NTUEE-ESLab/2017Fall-SmartCameraCar#for-raspberry-pi)
+- [For Arduino](https://github.com/NTUEE-ESLab/2017Fall-SmartCameraCar#for-arduino)
+- [Build the car](https://github.com/NTUEE-ESLab/2017Fall-SmartCameraCar#build-the-car)
+* [Usage](https://github.com/NTUEE-ESLab/2017Fall-SmartCameraCar#usage)
+* [Result](https://github.com/NTUEE-ESLab/2017Fall-SmartCameraCar#result)
+* [Reference](https://github.com/NTUEE-ESLab/2017Fall-SmartCameraCar#reference)
 
 ## Introduction
 This is a small camera car that can follow your motion and shot video for you.
