@@ -6,7 +6,7 @@
 -->
 <html>
 	<head>
-		<title>Reference - Smart Camera Car</title>
+		<title>About Us - Smart Camera Car</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<meta name="description" content="" />
@@ -37,7 +37,7 @@
 
 		<!-- Heading -->
 			<div id="heading" >
-				<h1>Reference</h1>
+				<h1>About Us</h1>
 			</div>
 
 		<!-- Main -->
@@ -45,6 +45,35 @@
 				<div class="inner">
 					<div class="content">
 						<h2>Postscript</h2>
+						<p>我們的作品其實完成度不算很高，要做一台小車有太多的變因。像是我們的兩顆動力輪用的是普通的直流馬達，用L298N去驅動它們，不過L298N在低速時的表現常常怪怪的，我們選用的兩顆馬達對於他們需要在的重量而言又有點太大力了，導致我們只能用分段轉，每次只轉一點點的方式旋轉(否則它一口氣轉個90度，就會track failure)。而且就算給兩顆馬達相同的電壓，也難保車子可以走直線，還要手動try and error調整，如果一開始就使用步進馬達、伺服馬達的話，問題將會少很多。<br />
+						另一方面，使用者體驗這一點也有許多改進的空間。因為後期才發現可以用python做出網頁來操控程式，不過我們的程式已經用C++寫好了，導致我們還要花力氣在兩個程式間的溝通，還沒來得及研究出來。當初想說為了效率可以好一點，因此用C++撰寫程式，不過現在看來好像是個錯誤的決定。<br />
+						Tracker的成功率其實也是個問題。一開始我們為了讓這台車可以不只是追蹤人，也可以追蹤其他物體，因此使用tracker而非detector。當初在測試時，我們都是把車子擺在桌上，手動框選我們的臉或是手機等物體讓OpenCV做tracking，車子的表現還算不錯，只要不要移動得太快，或是背景有顏色太相近的物體，基本上都可以追蹤成功。但是之後變成要tracking整個人時，就常常track failure，這點我們還來不及研究出解決辦法。事後想想，一開始應該不要把目標放那麼遠大，如果只是detect臉或手等等比較好分辨的物體，或是保持跟隨任何物體的目標，但是把影像傳到電腦、伺服器上，用強大的算力解決辨識這件工作，讓RPi只需要負責傳資料，也許效率、準確度上會比較好。<br />
+						如果有一天，有人想要重做這個project的話，也可以看看上面的意見，也許修改了之後，做出一台真的可以順暢跟隨人、上面載著高檔的相機，就像一位專屬攝影師的跟拍車。</p>
+					</div>
+					<div class="content">
+						<h2>Team Members</h2>
+						<div class="row">
+							<div class="col-6 col-12-medium">
+								<div class="content">
+									<h3>溫郁承 warmtub</h3>
+									<div class="image fit">
+										<img src="images/warmtub.jpg" alt="" />
+									</div>
+									<p>Senior of NTUEE</p>
+									<p><a href="mailto:b03901162@ntu.edu.tw"> b03901162@ntu.edu.tw</a></p>
+								</div>
+							</div>
+							<div class="col-6 col-12-medium">
+								<div class="content">
+									<h3>高子佳 kaoben2731</h3>
+									<div class="image fit">
+										<img src="images/kaoben.jpg" alt="" />
+									</div>
+									<p>Senior of NTUEE</p>
+									<p><a href="mailto:kaoben2731@gmailcom"> kaoben2731@gmail.com</a></p>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</section>
