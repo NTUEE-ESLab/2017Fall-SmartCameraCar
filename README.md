@@ -230,8 +230,7 @@ Use Arduino IDE to burn the code in *** into Arduino.
 [](add file location)
 
 ### Build the car
-Please refer to the webpage.  
-[](add hyper link)
+Please refer to the [webpage](https://ntuee-eslab.github.io/2017Fall-SmartCameraCar/webpage/build.html).  
 
 ## Usage
 After setup the whole car, turn on Arduino, Raspberry pi and the whole power.  
