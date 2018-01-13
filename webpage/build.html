@@ -48,31 +48,98 @@
 							<h2>底盤製作</h2>
 						</header>
 						<h3>1. 將PC板切割為大小為13cm*21cm，並在下圖位置鑽孔</h3>
-						<p>__孔徑為3mm，__孔徑為4mm</p>
+						<p>藍點孔徑為3mm，紅點孔徑為4mm</p>
+						<div class="image">
+							<img src="images/step1-1.jpg" width=600 alt="" />
+						</div>
 						<p>成品示意圖</p>
-						<div class="image fit">
-							<img src="images/step1-2.jpg" alt="" />
+						<div class="image">
+							<img src="images/step1-2.jpg" width=600 alt="" />
 						</div>
 						<h3>2. 依照螺絲、墊片、滾珠輪、銅柱、PC板、螺絲的順序將兩組滾珠輪裝上</h3>
 						<p>成品示意圖</p>
-						<div class="image fit">
-							<img src="images/step2.jpg" alt="" />
+						<div class="image">
+							<img src="images/step2.jpg" width=400  alt="" />
 						</div>
 						<h3>3. 使用源達科技"4WD 智能小車底盤 越野型 直流減速電機 超大型底盤(適用JGA25-371)"套件中的鋁合金支架<br>&nbsp&nbsp&nbsp&nbsp將長條形和L形支架固定於PC板上</h3>
 						<p>成品示意圖</p>
 						<div class="image fit">
 							<img src="images/step3.jpg" alt="" />
 						</div>
-						<h3>4. 將L298N兩對輸出各自接上JGA25-371直流馬達，並在電源供應端先接上導線，正端接上開關，負端接上小塊麵包板作為接地</h3>
+						<h3>4. 將L298N兩對輸出各自接上JGA25-371直流馬達，並在電源供應端先接上導線，正端接上開關，負端接上小塊麵包板作為共地</h3>
 						<p>成品示意圖</p>
 						<div class="image fit">
 							<img src="images/step4.jpg" alt="" />
 						</div>
-						<h3></h3>
+						<h3>5. 將馬達固定在L形支架上，並將L298N控制腳位in1~4、enA及enB接上杜邦線</h3>
 						<p>成品示意圖</p>
 						<div class="image fit">
-							<img src="images/step2.jpg" alt="" />
+							<img src="images/step5.jpg" alt="" />
 						</div>
+						<header>
+							<h2>車體製作</h2>
+						</header>
+						<h3>1. 將軸承放置在車體與雲台中間</h3>
+						<p>車體模型參考<a href="https://github.com/NTUEE-ESLab/2017Fall-SmartCameraCar/blob/master/car_body_3d_model/car_button.stl">car_button.stl</a></p>
+						<p>雲台模型參考<a href="https://github.com/NTUEE-ESLab/2017Fall-SmartCameraCar/blob/master/car_body_3d_model/car_top.stl">car_top.stl</a></p>
+						<p>成品示意圖</p>
+						<div class="image">
+							<img src="images/step6-1.jpg" width=600 alt="" />
+						</div>
+						<p>※備註：必須在底部先鑽洞讓車底跟底盤可以用螺絲連接，以及讓滾珠輪的螺絲不會卡住；或是直接修改模型檔案在正確位置挖洞※</p>
+						<div class="image">
+							<img src="images/step6-2.jpg" width=600 alt="" />
+						</div>
+						<h3>2. SG90伺服馬達鎖上十字形支架，並且修改長度長徑小於2.3cm</h3>
+						<p>成品示意圖</p>
+						<div class="image">
+							<img src="images/step7.jpg" width=400 alt="" />
+						</div>
+						<h3>3. 將SG90伺服馬達固定在雲台支柱下方</h3>
+						<p>成品示意圖</p>
+						<div class="image">
+							<img src="images/step8.jpg" width=600 alt="" />
+						</div>
+						<p>※備註：必須使用厚紙板填補縫隙讓伺服馬達不易偏移；或是直接修改模型檔案製作凹槽※</p>
+						<div class="image">
+							<img src="images/step9.jpg" width=400 alt="" />
+						</div>
+						<header>
+							<h2>組合</h2>
+						</header>
+						<h3>1. 將底盤與車體組合，要注意不要壓住任何導線</h3>
+						<p>成品示意圖</p>
+						<div class="image">
+							<img src="images/step10.jpg" width=600 alt="" />
+						</div>
+						<h3>2. 連接Arduino的配線，連接如下
+						<br>&nbsp&nbsp&nbsp&nbsp digital12 &nbsp&nbsp&nbsp=====>&nbsp SG90訊號線(橘色)
+						<br>&nbsp&nbsp&nbsp&nbsp digital11 &nbsp&nbsp&nbsp=====>&nbsp L298N控制腳位enB
+						<br>&nbsp&nbsp&nbsp&nbsp digital10 &nbsp&nbsp&nbsp=====>&nbsp L298N控制腳位in4
+						<br>&nbsp&nbsp&nbsp&nbsp digital9 &nbsp&nbsp&nbsp&nbsp=====>&nbsp L298N控制腳位in3
+						<br>&nbsp&nbsp&nbsp&nbsp digital7 &nbsp&nbsp&nbsp&nbsp=====>&nbsp L298N控制腳位in2
+						<br>&nbsp&nbsp&nbsp&nbsp digital6 &nbsp&nbsp&nbsp&nbsp=====>&nbsp L298N控制腳位in1
+						<br>&nbsp&nbsp&nbsp&nbsp digital5 &nbsp&nbsp&nbsp&nbsp=====>&nbsp L298N控制腳位enA
+						<br>&nbsp&nbsp&nbsp&nbsp 5V &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp=====>&nbsp SG90電源線(紅色)
+						<br>&nbsp&nbsp&nbsp&nbsp GND &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp=====>&nbsp SG90接地線(棕色)
+						<br>&nbsp&nbsp&nbsp&nbsp GND &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp=====>&nbsp 小塊麵包板共地
+						<br>&nbsp&nbsp&nbsp&nbsp analog4 &nbsp&nbsp=====>&nbsp I2C SDA訊號(RPI GPIO0(pin3))
+						<br>&nbsp&nbsp&nbsp&nbsp analog5 &nbsp&nbsp=====>&nbsp I2C SCL訊號(RPI GPIO1(pin5))</h3>
+						<p>成品示意圖</p>
+						<div class="image">
+							<img src="images/step11.jpg" width=600 alt="" />
+						</div>
+						<h3>2. 將Arduino固定在車體左後側</h3>
+						<p>成品示意圖</p>
+						<div class="image">
+							<img src="images/step12.jpg" width=600 alt="" />
+						</div>
+						<h3>3. 將Arduino固定在車體左後側</h3>
+						<p>成品示意圖</p>
+						<div class="image">
+							<img src="images/step13.jpg" width=400 alt="" />
+						</div>
+						
 					</div>
 				</div>
 			</section>
