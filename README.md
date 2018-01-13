@@ -201,7 +201,7 @@ After rebooting, you can use `vcgencmd get_camera` to check if the camera is ava
 supported=1 detected=1
 ```
 
-For OpenCV to use the camera, we should enable v4l2
+For OpenCV to use the camera, we should enable v4l2 (the script `enable_v4l2.sh` can do the same thing) (you should do this all the time, so we recommend you to add it into `~/.bashrc`)
 
 ```bash
 sudo modprobe bcm2835-v4l2
@@ -239,8 +239,10 @@ Please refer to the [webpage](https://ntuee-eslab.github.io/2017Fall-SmartCamera
 ## Usage
 After setup the whole car, turn on Arduino, Raspberry pi and the whole power.  
 On Raspberry pi, you should run 2 programs.  
-The `myapp_opencv` setup a server for webpage monitering.  
+The `myapp_opencv.py` setup a server for webpage monitering.  
 The `Tracker_and_I2C` is the main tracking program.  
+  
+Simple type `make` to compile `Tracker_and_I2C.cpp`, then you can start track  
 
 ```bash
 cd RPi_programs  
