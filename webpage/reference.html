@@ -47,47 +47,58 @@
 						<header>
 							<h2>Tracking</h2>
 						</header>
-						<h3>OpenCV  <img src="images/OpenCV.png" alt="" height="100" /></h3>
-						<p>OpenCV(Open Source Computer Vision) is an open source library. It's often used while you need to perform object detection, object tracking and object recognition.</p>
-						<h3>Tracker</h3>
-						<p>We use the tracker in OpenCV as the tracker.<br />There are kinds of trackers, each has its strength and weakness, you can learn more from <a href="https://www.learnopencv.com/object-tracking-using-opencv-cpp-python/">here</a>.  The process ability of RPi is poor compare to PC, so we use MEDIANFLOW tracker because it's fast.</p>
-						<p>This tracker tracks the object in both forward and backward directions in time and measures the discrepancies between these two trajectories. <br />
-						After test, we found that it will notice the tracking failure, so the car will stop while loss tracking, rather than follow some other things and cause danger.</p>
-						<p>It can get a acceptable fps on RPi like the picture below, while other trakcers may have fps around 3.</p>
-						<img src="images/MediamFlowTracker.png" alt="" / width="400">
+						<h3><a href="http://storychen.blogspot.tw/2016/06/raspberry-pi-3-opencv.html">Raspberry Pi 3 (三) 安裝OpenCV</a></h3>
+						<p>Installing OpenCV on RPi is a big job! The tracker code are in the opencv contrib repository, and most of the prebuilt programs don't contain this function.  So we had to build it on our own.  It's not surprising that it takes you more than 2 hours.  This website gives us proper cmake command so we can fortunately compile OpenCV.</p>
+						<h3><a href="https://www.raspberrypi.org/forums/viewtopic.php?t=176697">Using OpenCV with Raspberry Pi camera</a></h3>
+						<p>this website tell us how to use RPi camera with OpenCV.</p>
+						<h3><a href="https://www.learnopencv.com/object-tracking-using-opencv-cpp-python/">Object Tracking using OpenCV (C++/Python)</a></h3>
+						<p>Give us a overview of OpenCV trackers, and provide a basic tracking code.</p>
+						<h3><a href="https://www.pyimagesearch.com/2015/12/21/increasing-webcam-fps-with-python-and-opencv/">Increasing webcam FPS with Python and OpenCV</a></h3>
+						<p>We have not done this, but if you want to accelerate the tracker, this may help.</p>
 					</div>
 					<div class="content">
 						<header>
 							<h2>Detection</h2>
 						</header>
-						<p>The tracker mentioned above need user to provide a ROI(region of interest) to initialize itself. Thus we want to use object detector to tell the tracker where to track.</p>
-						<p>Yes, OpenCV have a DNN module for it, but for the poor capability of RPi, it will be too slow. So we found other method.</p>
-						<h3>Darknet  <img src="images/darknet.png" alt="" height="200" /></h3>
-						<p>Darknet is an open source neural network framework written in C and CUDA. It is fast, easy to install, and supports CPU and GPU computation. You can find more information <a href="https://pjreddie.com/darknet/">here</a>.</p>
-						<p>The work principle of it is below, from <a href="https://pjreddie.com/darknet/yolo/">yolo website.</a></p>
-						<img src="images/yolo_detect.png" alt="" width="600" />
-						<p></p>
-						<h3>Yolo  <img src="images/yolo.png" alt="" height="150" /></h3>
-						<p>You only look once (YOLO) is a state-of-the-art, real-time object detection system. You can find more information <a href="https://pjreddie.com/darknet/yolo/">here</a>.</p>
-						<p>If you run darknet with yolo, you will see the architecture of the network you use, like below. It's a neural network, and can detect different objects on the same picture.</p>
-						<img src="images/darknet_run.png" alt="" height="500" />
-						<p>Yolo detects object well, but it's too large and complicated for RPi to run.  There is a smaller one called Tiny Yolo.  It may misdetect something like below, but detect a person is a piece of cake for it.</p>
-						<img src="images/tiny_yolo_detect.png" alt="" height="400" />
-						<p>Tiny yolo is still not quick enough.  It took 3 seconds on my PC to detect the result above.</p>
-						<p></p>
-						<h3>NNPACK  <img src="images/nnpack.png" alt="" height="150" /></h3>
-						<p>NNPACK is an acceleration package for neural network computations.</p>
-						<p>There is a Darknet with NNPACK available on <a href="https://github.com/digitalbrain79/darknet-nnpack">github</a>.  It can accelerate the NN without a GPU, so it's suitable for  embedding system like RPi.  It also provide OpenCV interface so we can combine it with our tracker directly.</p>
-						<p>Use NNPACK with tiny yolo, we can detect a person from a  320*240 picture on RPi in about 2 second.  It's acceptable compare to manually selecting ROI.</p>
-						<img src="images/our_car_detect.png" alt="" height="400" />
+						<h3><a href="https://pjreddie.com/darknet/yolo/">YOLO: Real-Time Object Detection</a></h3>
+						<p>We found yolo here.</p>
+						<h3><a href="https://github.com/digitalbrain79/darknet-nnpack">Darknet with NNPACK</a></h3>
+						<p>We found NNPACK for darknet here.</p>
+						<h3><a href="https://github.com/opencv/opencv/blob/master/samples/dnn/yolo_object_detection.cpp">yolo_object_detection.cpp</a></h3>
+						<p>We found the basic OpcnCV darknet usage here.</p>
+						<h3><a href="https://www.pyimagesearch.com/2017/09/11/object-detection-with-deep-learning-and-opencv/">Object detection with deep learning and OpenCV</a></h3>
+						<p>We didn't use this in our project.  But if you want to use some other neural network, this may help.</p>
 					</div>
 					<div class="content">
 						<header>
 							<h2>Monitoring</h2>
 						</header>
-						<h3>Flask  <img src="images/flask.png" alt="" height="150" /></h3>
-						<p>We use another python program with flask to build a local website for user to monitoring the tracking condition of the car.  The tracking program will store the frame it looks to the storage, and the python program will stream the picture onto the website.</p>
-						<img src="images/web_monitoring.png" alt="" height="400" />
+						<h3><a href="http://hophd.com/raspberry-pi-python-flask-video-streaming/">Raspberry Pi 使用Python Flask達成串流視訊方法分享</a></h3>
+						<p>We found how to use python to send video onto a website here.</p>
+						<h3><a href="http://hophd.com/raspberry-pi-remote-car-web-interface/">Raspberry Pi樹莓派遙控車–網頁介面篇</a></h3>
+						<p>We have not done this, but if you want to control the car by method other than ssh, this may help.</p>
+						<h3><a href="https://stackoverflow.com/questions/19071512/socket-error-errno-48-address-already-in-use">socket.error: [Errno 48] Address already in use</a></h3>
+						<p>I encountered the same problem while opening python program.  I found the solution here.</p>
+					</div>
+					<div class="content">
+						<header>
+							<h2>Socket</h2>
+						</header>
+						<h3>We plan to use website to control the car, and flask and python is a simple way to build a website.  Unfortunately, our tracking program is written in c++.  So we have to find a IPC(inter process communication) to help us.  Socket, or UNIX Domain Socket, seems good for us, but we haven't combine it with our program.  Maybe you can try.</h3>
+						<p><a href="https://akaedu.github.io/book/ch37s04.html">4. UNIX Domain Socket IPC-第 37 章 socket编程</a><br />
+						<a href="https://stackoverflow.com/questions/39901913/makefile-error-boost-asio-hpp-no-such-file-or-directory-windows">Makefile error: boost/asio.hpp: No such file or directory (Windows)</a><br />
+						<a href="http://s.epb.idv.tw/han-shi-ku/boost-ku/wang-lu/shiyongboostasiobianxietongxinchengxu">使用Boost.Asio編寫通信程序</a><br />
+						<a href="https://docs.python.org/3.2/library/socketserver.html">socketserver — A framework for network servers</a><br />
+						<a href="https://stackoverflow.com/questions/20314524/c-opencv-image-sending-through-socket">C++ OpenCV image sending through socket</a></p>
+					</div>
+					<div class="content">
+						<header>
+							<h2>Auto Start</h2>
+						</header>
+						<h3>If the car can auto start web server and tracking program while power on, it will be more convenient.  We have not success yet, but you can try!</h3>
+						<p><a href="http://icodding.blogspot.tw/2016/01/raspberry-pi-linux-pi-sell-script.html">raspberry pi (linux pi) 如何設定開機自動執行 sell script 呢?</a><br />
+						<a href="http://www.stuffaboutcode.com/2012/06/raspberry-pi-run-program-at-start-up.html">Raspberry Pi - run program at start-up</a></p>
+					</div>
 				</div>
 			</section>
 
