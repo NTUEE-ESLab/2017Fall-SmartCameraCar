@@ -227,7 +227,11 @@ sudo apt-get install i2c-tools
 
 ### For Arduino:  
 Use Arduino IDE to upload the code in Base_motor_and_Plat_motor_controller/ into Arduino.  
-[Base_motor_and_Plat_motor_controller/Base_motor_and_Plat_motor_controller.ino](https://github.com/NTUEE-ESLab/2017Fall-SmartCameraCar/blob/master/Base_motor_and_Plat_motor_controller/Base_motor_and_Plat_motor_controller.ino)
+[Base_motor_and_Plat_motor_controller.ino](https://github.com/NTUEE-ESLab/2017Fall-SmartCameraCar/blob/master/Base_motor_and_Plat_motor_controller/Base_motor_and_Plat_motor_controller.ino)
+
+We also provide some simple test program for motor, L298N and servo
+[Base_motor_and_Plat_motor_controller.ino](https://github.com/NTUEE-ESLab/2017Fall-SmartCameraCar/blob/master/Base_motor_and_Plat_motor_controller/Base_motor_and_Plat_motor_controller.ino)
+[Base_motor_and_Plat_motor_controller.ino](https://github.com/NTUEE-ESLab/2017Fall-SmartCameraCar/blob/master/Base_motor_and_Plat_motor_controller/Base_motor_and_Plat_motor_controller.ino)
 
 ### Build the car
 Please refer to the [webpage](https://ntuee-eslab.github.io/2017Fall-SmartCameraCar/webpage/build.html).  
