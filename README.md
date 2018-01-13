@@ -257,9 +257,7 @@ If you see `Address already in use` error while use `myapp_opencv.py`, then foll
 - If you don't have `lsof`, then install it by typing `sudo apt-get install lsof`. Use `lsof -i:5000` to find the program using the port 5000, and you can see the python PID, then `kill <python PID>`, and you can open `myapp_opencv.py` again.  
 
 ## Result
-Please see the webpage.  
-[](add link)
+Please see the [webpage](https://ntuee-eslab.github.io/2017Fall-SmartCameraCar/webpage/index.html).  
 
 ## Reference
-Please see the webpage.  
-[](add link)
+Please see the [webpage](https://ntuee-eslab.github.io/2017Fall-SmartCameraCar/webpage/reference.html).  
