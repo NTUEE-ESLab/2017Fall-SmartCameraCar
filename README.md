@@ -33,13 +33,13 @@ Then we built this Smart Camera Car, everybody can use it.
 - Raspberry pi camera module with cable longer than 30cm
 - Arduino uno
 - L298N
-- 2 motors and wheels
+- 2 motors(JGA25-371) and wheels
 - 2 universal wheels
 - Tower Pro SG-90 servo motor
 - 2 output Powerbank (we use asus zenpower pro)
 - 8 AA battery and a battery box
 - car body (how to design it is up to you)
-- [thrust bearing](/webpage/images/thrust_bearing.jpg)
+- [thrust bearing(skf 51305)](/webpage/images/thrust_bearing.jpg)
 
 ### Softwares
 - C++
@@ -93,7 +93,7 @@ cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local  -D INSTALL
 
 Then compile it, use `-j4` to use 4 core of Raspberry pi.  It may takes more than 2 hours, depends on the speed of micro sd card.
 
-```bash
+```bash 	simple_servo_test.ino
 make -j4
 ```
 
@@ -226,8 +226,12 @@ sudo apt-get install i2c-tools
 ```
 
 ### For Arduino:  
-Use Arduino IDE to burn the code in *** into Arduino.  
-[](add file location)
+Use Arduino IDE to upload the code in Base_motor_and_Plat_motor_controller/ into Arduino.  
+[Base_motor_and_Plat_motor_controller.ino](https://github.com/NTUEE-ESLab/2017Fall-SmartCameraCar/blob/master/Base_motor_and_Plat_motor_controller/Base_motor_and_Plat_motor_controller.ino)
+
+We also provide some simple test program for motor, L298N and servo.  
+[Simple_motor_andL298N_test.ino](https://github.com/NTUEE-ESLab/2017Fall-SmartCameraCar/blob/master/Base_motor_and_Plat_motor_controller/simple_motor_andL298N_test.ino)
+[Simple_servo_test.ino](https://github.com/NTUEE-ESLab/2017Fall-SmartCameraCar/blob/master/Base_motor_and_Plat_motor_controller/simple_servo_test.ino)
 
 ### Build the car
 Please refer to the [webpage](https://ntuee-eslab.github.io/2017Fall-SmartCameraCar/webpage/build.html).  
