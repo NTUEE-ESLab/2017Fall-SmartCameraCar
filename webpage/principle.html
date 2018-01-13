@@ -1,0 +1,109 @@
+<!DOCTYPE HTML>
+<!--
+	Industrious by TEMPLATED
+	templated.co @templatedco
+	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+-->
+<html>
+	<head>
+		<title>Working Principle - Smart Camera Car</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+	</head>
+	<body class="is-preload">
+
+		<!-- Header -->
+			<header id="header">
+				<a class="logo" href="index.html">Smart Camera Car</a>
+				<nav>
+					<a href="#menu">Menu</a>
+				</nav>
+			</header>
+
+		<!-- Nav -->
+			<nav id="menu">
+				<ul class="links">
+					<li><a href="index.html">Home</a></li>
+					<li><a href="build.html">Build up</a></li>
+					<li><a href="principle.html">Working principle</a></li>
+					<li><a href="https://github.com/NTUEE-ESLab/2017Fall-SmartCameraCar">Github repository</a></li>
+					<li><a href="reference.html">Reference</a></li>
+					<li><a href="about.html">About us</a></li>
+				</ul>
+			</nav>
+
+		<!-- Heading -->
+			<div id="heading" >
+				<h1>Working Principle</h1>
+			</div>
+
+		<!-- Main -->
+			<section id="main" class="wrapper">
+				<div class="inner">
+					<div class="content">
+						<header>
+							<h2>Tracking</h2>
+						</header>
+						<h3>OpenCV  <img src="images/OpenCV.png" alt="" height="100" /></h3>
+						<p>OpenCV(Open Source Computer Vision) is an open source library. It's often used while you need to perform object detection, object tracking and object recognition.</p>
+						<h3>Tracker</h3>
+						<p>We use the tracker in OpenCV as the tracker.<br />There are kinds of trackers, each has its strength and weakness, you can learn more from <a href="https://www.learnopencv.com/object-tracking-using-opencv-cpp-python/">here</a>.  The process ability of RPi is poor compare to PC, so we use MEDIANFLOW tracker because it's fast.</p>
+						<p>This tracker tracks the object in both forward and backward directions in time and measures the discrepancies between these two trajectories. <br />
+						After test, we found that it will notice the tracking failure, so the car will stop while loss tracking, rather than follow some other things and cause danger.</p>
+						<p>It can get a acceptable fps on RPi like the picture below, while other trakcers may have fps around 3.</p>
+						<img src="images/MediamFlowTracker.png" alt="" / width="400">
+					</div>
+					<div class="content">
+						<header>
+							<h2>Detection</h2>
+						</header>
+						<p>The tracker mentioned above need user to provide a ROI(region of interest) to initialize itself. Thus we want to use object detector to tell the tracker where to track.</p>
+						<p>Yes, OpenCV have a DNN module for it, but for the poor capability of RPi, it will be too slow. So we found other method.</p>
+						<h3>Darknet  <img src="images/darknet.png" alt="" height="200" /></h3>
+						<p>Darknet is an open source neural network framework written in C and CUDA. It is fast, easy to install, and supports CPU and GPU computation. You can find more information <a href="https://pjreddie.com/darknet/">here</a>.</p>
+						<p>The work principle of it is below, from <a href="https://pjreddie.com/darknet/yolo/">yolo website.</a></p>
+						<img src="images/yolo_detect.png" alt="" width="600" />
+						<p></p>
+						<h3>Yolo  <img src="images/yolo.png" alt="" height="150" /></h3>
+						<p>You only look once (YOLO) is a state-of-the-art, real-time object detection system. You can find more information <a href="https://pjreddie.com/darknet/yolo/">here</a>.</p>
+						<p>If you run darknet with yolo, you will see the architecture of the network you use, like below. It's a neural network, and can detect different objects on the same picture.</p>
+						<img src="images/darknet_run.png" alt="" height="500" />
+						<p>Yolo detects object well, but it's too large and complicated for RPi to run.  There is a smaller one called Tiny Yolo.  It may misdetect something like below, but detect a person is a piece of cake for it.</p>
+						<img src="images/tiny_yolo_detect.png" alt="" height="400" />
+						<p>Tiny yolo is still not quick enough.  It took 3 seconds on my PC to detect the result above.</p>
+						<p></p>
+						<h3>NNPACK  <img src="images/nnpack.png" alt="" height="150" /></h3>
+						<p>NNPACK is an acceleration package for neural network computations.</p>
+						<p>There is a Darknet with NNPACK available on <a href="https://github.com/digitalbrain79/darknet-nnpack">github</a>.  It can accelerate the NN without a GPU, so it's suitable for  embedding system like RPi.  It also provide OpenCV interface so we can combine it with our tracker directly.</p>
+						<p>Use NNPACK with tiny yolo, we can detect a person from a  320*240 picture on RPi in about 2 second.  It's acceptable compare to manually selecting ROI.</p>
+
+						
+						
+					</div>
+				</div>
+			</section>
+
+		<!-- Footer -->
+			<footer id="footer">
+				<div class="inner">
+					<div class="content">
+						<p>You can download the code from <a href="https://github.com/NTUEE-ESLab/2017Fall-SmartCameraCar">Github</a></p>
+					</div>
+					<div class="copyright">
+						Smart Camera Car, final project of <a href="https://ntuee-eslab.github.io/">2017 Fall NTUEE-ESLab</a>; Webpage template from <a href="https://templated.co/industrious">TEMPLATED</a><br />&copy; warmtub/kaoben2731. All rights reserved.
+					</div>
+				</div>
+			</footer>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
