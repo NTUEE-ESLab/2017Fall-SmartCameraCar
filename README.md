@@ -93,7 +93,7 @@ cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local  -D INSTALL
 
 Then compile it, use `-j4` to use 4 core of Raspberry pi.  It may takes more than 2 hours, depends on the speed of micro sd card.
 
-```bash
+```bash 	simple_servo_test.ino
 make -j4
 ```
 
@@ -230,8 +230,8 @@ Use Arduino IDE to upload the code in Base_motor_and_Plat_motor_controller/ into
 [Base_motor_and_Plat_motor_controller.ino](https://github.com/NTUEE-ESLab/2017Fall-SmartCameraCar/blob/master/Base_motor_and_Plat_motor_controller/Base_motor_and_Plat_motor_controller.ino)
 
 We also provide some simple test program for motor, L298N and servo
-[Base_motor_and_Plat_motor_controller.ino](https://github.com/NTUEE-ESLab/2017Fall-SmartCameraCar/blob/master/Base_motor_and_Plat_motor_controller/Base_motor_and_Plat_motor_controller.ino)
-[Base_motor_and_Plat_motor_controller.ino](https://github.com/NTUEE-ESLab/2017Fall-SmartCameraCar/blob/master/Base_motor_and_Plat_motor_controller/Base_motor_and_Plat_motor_controller.ino)
+[simple_motor_andL298N_test.ino](https://github.com/NTUEE-ESLab/2017Fall-SmartCameraCar/blob/master/Base_motor_and_Plat_motor_controller/simple_motor_andL298N_test.ino)
+[simple_servo_test.ino](https://github.com/NTUEE-ESLab/2017Fall-SmartCameraCar/blob/master/Base_motor_and_Plat_motor_controller/simple_servo_test.ino)
 
 ### Build the car
 Please refer to the [webpage](https://ntuee-eslab.github.io/2017Fall-SmartCameraCar/webpage/build.html).  
