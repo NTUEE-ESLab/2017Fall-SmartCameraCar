@@ -66,7 +66,7 @@
 						<div class="image fit">
 							<img src="images/step3.jpg" alt="" />
 						</div>
-						<h3>4. 將L298N兩對輸出各自接上JGA25-371直流馬達，並在電源供應端先接上導線，正端接上開關，負端接上小塊麵包板作為共地</h3>
+						<h3>4. 將L298N兩對輸出各自接上JGA25-371直流馬達，並在電源供應端先接上導線，正極接上開關，負極接上小塊麵包板作為共地</h3>
 						<p>成品示意圖</p>
 						<div class="image fit">
 							<img src="images/step4.jpg" alt="" />
@@ -123,21 +123,39 @@
 						<br>&nbsp&nbsp&nbsp&nbsp 5V &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp=====>&nbsp SG90電源線(紅色)
 						<br>&nbsp&nbsp&nbsp&nbsp GND &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp=====>&nbsp SG90接地線(棕色)
 						<br>&nbsp&nbsp&nbsp&nbsp GND &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp=====>&nbsp 小塊麵包板共地
-						<br>&nbsp&nbsp&nbsp&nbsp analog4 &nbsp&nbsp=====>&nbsp I2C SDA訊號(RPI GPIO0(pin3))
-						<br>&nbsp&nbsp&nbsp&nbsp analog5 &nbsp&nbsp=====>&nbsp I2C SCL訊號(RPI GPIO1(pin5))</h3>
+						<br>&nbsp&nbsp&nbsp&nbsp analog4 &nbsp&nbsp=====>&nbsp I2C SDA訊號(RPI3 GPIO0(pin3))
+						<br>&nbsp&nbsp&nbsp&nbsp analog5 &nbsp&nbsp=====>&nbsp I2C SCL訊號(RPI3 GPIO1(pin5))</h3>
 						<p>成品示意圖</p>
 						<div class="image">
 							<img src="images/step11.jpg" width=600 alt="" />
 						</div>
-						<h3>2. 將Arduino固定在車體左後側</h3>
-						<p>成品示意圖</p>
-						<div class="image">
-							<img src="images/step12.jpg" width=600 alt="" />
-						</div>
 						<h3>3. 將Arduino固定在車體左後側</h3>
 						<p>成品示意圖</p>
 						<div class="image">
+							<img src="images/step12.jpg" width=400 alt="" />
+						</div>
+						<h3>4. 連接8顆電池座配線，正極連接到開關(開關另一側連接到L298N電源供應端正極)，負極連接到小塊麵包板共地，並將電池座抵在Arduino後方</h3>
+						<p>成品示意圖</p>
+						<div class="image">
 							<img src="images/step13.jpg" width=400 alt="" />
+						</div>
+						<h3>5. 連接RPI3的配線，連接如下
+						<br>&nbsp&nbsp&nbsp&nbsp RPI3 GPIO0(pin3) &nbsp&nbsp=====>&nbsp I2C SDA訊號(Arduino analog4)
+						<br>&nbsp&nbsp&nbsp&nbsp RPI3 GPIO0(pin5) &nbsp&nbsp=====>&nbsp I2C SCL訊號(Arduino analog5)
+						<br>&nbsp&nbsp&nbsp&nbsp RPI3 GND(pin9) &nbsp&nbsp&nbsp&nbsp=====>&nbsp 小塊麵包板共地</h3>
+						<h3>6. 將RPI3固定在車體前側</h3>
+						<p>成品示意圖</p>
+						<div class="image">
+							<img src="images/step14.jpg" width=600 alt="" />
+						</div>
+						<h3>7. 將RPI3鏡頭固定於雲台上</h3>
+						<h3>8. 使用行動電源替Arduino與RPI3供電</h3>
+						<h3>9. 架上您的攝影裝備</h3>
+						<header>
+							<h2>大功告成！！！</h2>
+						</header>
+						<div class="image fit">
+							<img src="images/appearance.jpg" width=600 alt="" />
 						</div>
 						
 					</div>

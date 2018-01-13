@@ -33,13 +33,13 @@ Then we built this Smart Camera Car, everybody can use it.
 - Raspberry pi camera module with cable longer than 30cm
 - Arduino uno
 - L298N
-- 2 motors and wheels
+- 2 motors(JGA25-371) and wheels
 - 2 universal wheels
 - Tower Pro SG-90 servo motor
 - 2 output Powerbank (we use asus zenpower pro)
 - 8 AA battery and a battery box
 - car body (how to design it is up to you)
-- [thrust bearing](/webpage/images/thrust_bearing.jpg)
+- [thrust bearing(skf 51305)](/webpage/images/thrust_bearing.jpg)
 
 ### Softwares
 - C++
@@ -226,8 +226,8 @@ sudo apt-get install i2c-tools
 ```
 
 ### For Arduino:  
-Use Arduino IDE to burn the code in *** into Arduino.  
-[](add file location)
+Use Arduino IDE to burn the code in Base_motor_and_Plat_motor_controller/ into Arduino.  
+[Base_motor_and_Plat_motor_controller/](https://github.com/NTUEE-ESLab/2017Fall-SmartCameraCar/tree/master/Base_motor_and_Plat_motor_controller)
 
 ### Build the car
 Please refer to the [webpage](https://ntuee-eslab.github.io/2017Fall-SmartCameraCar/webpage/build.html).  
